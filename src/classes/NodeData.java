@@ -8,7 +8,6 @@ public class NodeData implements api.NodeData {
     private GeoLocation pos;
     private double weight;
     private int tag;
-    private Color color;
 
     @Override
     public int getKey() {
@@ -53,5 +52,15 @@ public class NodeData implements api.NodeData {
     @Override
     public void setTag(int t) {
         this.tag = t;
+    }
+
+    @Override
+    public String toString() {
+        return "NodeData{" +
+                "id=" + id +
+                ", pos=" + pos +
+                ", weight=" + weight +
+                ", tag=" + tag +
+                '}';
     }
 }
