@@ -14,11 +14,11 @@ public interface NodeData {
 	/** Returns the location of this node, if none return null.
 	 * @return
 	 */
-	public GeoLocation getLocation();
+	public GeoLocation getPos();
 	/** Allows changing this node's location.
 	 * @param p - new new location  (position) of this node.
 	 */
-	public void setLocation(GeoLocation p);
+	public void setPos(GeoLocation p);
 	/**
 	 * Returns the weight associated with this node.
 	 * @return
