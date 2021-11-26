@@ -9,6 +9,11 @@ public class NodeData implements api.NodeData {
     private double weight;
     private int tag;
 
+    public NodeData(int id, int tag) {
+        this.id = id;
+        this.tag = tag;
+    }
+
     @Override
     public int getKey() {
         return this.id;
