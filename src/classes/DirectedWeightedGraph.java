@@ -1,7 +1,15 @@
 package classes;
 import api.EdgeData;
+import api.GeoLocation;
 import api.NodeData;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -118,30 +126,39 @@ public class DirectedWeightedGraph implements api.DirectedWeightedGraph {
     public int getMC() {
         return this.MC;
     }
-    public static void main(String[] args) {
-        classes.NodeData node1 = new classes.NodeData(1,22);
-        classes.NodeData node2 = new classes.NodeData(2,55);
-        classes.NodeData node3 = new classes.NodeData(3,65);
-        classes.NodeData node4 = new classes.NodeData(4,85);
-        classes.NodeData node5 = new classes.NodeData(5,102);
-        DirectedWeightedGraph dwg = new DirectedWeightedGraph();
-        dwg.addNode(node1);
-        dwg.addNode(node2);
-        dwg.addNode(node3);
-        dwg.addNode(node4);
-        dwg.addNode(node5);
-        dwg.connect(1,2,5);
-        dwg.connect(1,5,1);
-        dwg.connect(1,3,2);
-        dwg.connect(2,4,6);
-//        System.out.println(dwg.edgeSize);
-//        dwg.removeNode(1);
-//        System.out.println(dwg.edgeSize);
-        Iterator<EdgeData> iter = dwg.edgeIter();
-        while (iter.hasNext())
-            System.out.println(iter.next().getWeight());
 
+    public void initFromFile(String filePath) throws IOException, ParseException {
+        // parsing file "G1.json"
+        Object obj = new JSONParser().parse(new FileReader(filePath));
 
+        // typecasting obj to JSONObject
+        JSONObject jo = (JSONObject) obj;
+
+        JSONArray ja = (JSONArray) jo.get("Edges"); // getting the edges
+        Iterator iter = ja.iterator();// iterating the edges
+        while (iter.hasNext()) {// adding the edges into the graph
+            Map edgeMap = (Map) iter.next();
+            this.connect((int)(long)edgeMap.get("src"),
+                    (int)(long)edgeMap.get("dest"),(double)edgeMap.get("w"));
+        }
+
+        ja = (JSONArray) jo.get("Nodes");// getting the nodes
+        iter = ja.iterator();// iterating the nodes
+        while (iter.hasNext()) { // adding the nodes into the graph
+            Map nodeMap = (Map) iter.next();
+            String[] sGeo = ((String)nodeMap.get("pos")).split(",");
+            GeoLocation geo = new classes.GeoLocation(Double.parseDouble(sGeo[0]), Double.parseDouble(sGeo[1])
+                    , Double.parseDouble(sGeo[2]));
+            NodeData currNode = new classes.NodeData((int)(long)nodeMap.get("id"), geo);
+            this.addNode(currNode);
+        }
+
+    }
+    public static void main(String[] args) throws IOException, ParseException {
+        DirectedWeightedGraph g1 = new classes.DirectedWeightedGraph();
+        g1.initFromFile("C://Users//elads//IdeaProjects//Ex2//Data//G1.json");
+        System.out.println(g1.edgeSize());
+        System.out.println(g1.nodeSize());
     }
 
 
