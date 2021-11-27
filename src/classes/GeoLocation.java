@@ -1,5 +1,4 @@
 package classes;
-import com.google.gson.*;
 
 public class GeoLocation implements api.GeoLocation {
 
@@ -32,5 +31,13 @@ public class GeoLocation implements api.GeoLocation {
     public double distance(api.GeoLocation g) {
         double temp = Math.pow(g.x() - this.x, 2) + Math.pow(g.y() - this.y, 2);
         return Math.sqrt(temp);
+    }
+
+    public String toString() {
+        return "GeoLocation{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                '}';
     }
 }

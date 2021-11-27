@@ -5,13 +5,13 @@ import java.awt.*;
 public class NodeData implements api.NodeData {
 
     private int id;
-    private GeoLocation pos;
+    private api.GeoLocation pos;
     private double weight;
     private int tag;
 
-    public NodeData(int id, int tag) {
+    public NodeData(int id, api.GeoLocation pos) {
         this.id = id;
-        this.tag = tag;
+        this.pos = pos;
     }
 
     @Override
