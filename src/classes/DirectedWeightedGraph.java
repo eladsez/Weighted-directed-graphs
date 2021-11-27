@@ -2,12 +2,12 @@ package classes;
 import api.EdgeData;
 import api.GeoLocation;
 import api.NodeData;
+import classes.graphIterators.EdgesIterator;
+import classes.graphIterators.NodeIterator;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
@@ -64,23 +64,12 @@ public class DirectedWeightedGraph implements api.DirectedWeightedGraph {
 
     @Override
     public Iterator<NodeData> nodeIter() {
-        Collection<NodeData> tempColl = this.Nodes.values();//converts the Node hashmap into Collection
-        Iterator<NodeData> iter = tempColl.iterator();//create Iterator for the above collection
-        return iter;
+        return (Iterator) new NodeIterator(this);
     }
 
     @Override
     public Iterator<EdgeData> edgeIter() {
-        List<EdgeData> list = new ArrayList<>();
-        this.Edges.forEach((src, HashMap) -> {
-            Object[] tempO = HashMap.values().toArray();
-            EdgeData[] temp = new EdgeData[tempO.length];
-            for (int i = 0; i < tempO.length; i++)
-                temp[i] = (EdgeData)tempO[i];
-            Collections.addAll(list, temp);
-        });
-        Iterator<EdgeData> iter = list.iterator();
-        return iter;
+        return (Iterator)new EdgesIterator(this);
     }
 
     @Override
@@ -127,6 +116,22 @@ public class DirectedWeightedGraph implements api.DirectedWeightedGraph {
         return this.MC;
     }
 
+    public Collection<NodeData> getNodeColl(){
+        return Nodes.values();
+    }
+
+    public Collection<EdgeData> getEdgeColl(){
+        List<EdgeData> list = new ArrayList<>();
+        this.Edges.forEach((src, HashMap) -> {
+            Object[] tempO = HashMap.values().toArray();
+            EdgeData[] temp = new EdgeData[tempO.length];
+            for (int i = 0; i < tempO.length; i++)
+                temp[i] = (EdgeData)tempO[i];
+            Collections.addAll(list, temp);
+        });
+        return list;
+    }
+
     public void initFromFile(String filePath) throws IOException, ParseException {
         // parsing file "G1.json"
         Object obj = new JSONParser().parse(new FileReader(filePath));
@@ -154,12 +159,4 @@ public class DirectedWeightedGraph implements api.DirectedWeightedGraph {
         }
 
     }
-    public static void main(String[] args) throws IOException, ParseException {
-        DirectedWeightedGraph g1 = new classes.DirectedWeightedGraph();
-        g1.initFromFile("C://Users//elads//IdeaProjects//Ex2//Data//G1.json");
-        System.out.println(g1.edgeSize());
-        System.out.println(g1.nodeSize());
-    }
-
-
 }
