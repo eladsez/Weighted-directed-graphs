@@ -1,4 +1,4 @@
-package classes;
+package logicControl;
 
 public class EdgeData implements api.EdgeData {
 
@@ -11,6 +11,13 @@ public class EdgeData implements api.EdgeData {
         this.src = src;
         this.dest = dest;
         this.w = w;
+    }
+
+    public EdgeData(EdgeData e){
+        this.dest = e.dest;
+        this.tag = e.tag;
+        this.src = e.src;
+        this.w = e.w;
     }
 
     @Override
