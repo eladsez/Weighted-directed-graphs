@@ -1,9 +1,8 @@
-package classes;
+package logicControl;
+
 import api.EdgeData;
 import api.GeoLocation;
 import api.NodeData;
-import classes.graphIterators.EdgesIterator;
-import classes.graphIterators.NodeIterator;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -49,7 +48,7 @@ public class DirectedWeightedGraph implements api.DirectedWeightedGraph {
 
     @Override
     public void connect(int src, int dest, double w) {
-        EdgeData newEdge = new classes.EdgeData(src,dest,w);
+        EdgeData newEdge = new logicControl.EdgeData(src,dest,w);
         if (this.Edges.containsKey(src))//checks if already exist hashmap for the edges coming out from this node
             //append newEdge into the above hashmap
             this.Edges.get(src).put(dest,newEdge);
@@ -64,20 +63,65 @@ public class DirectedWeightedGraph implements api.DirectedWeightedGraph {
 
     @Override
     public Iterator<NodeData> nodeIter() {
-        return (Iterator) new NodeIterator(this);
+        return new Iterator<NodeData>() {
+            private final int MCheck = MC;
+            private Iterator<NodeData> iter = Nodes.values().iterator();
+            @Override
+            public boolean hasNext() {
+                if (this.MCheck != MC)
+                    throw new RuntimeException("");// TODO:something
+                return iter.hasNext();
+            }
+
+            @Override
+            public NodeData next() {
+                if (this.MCheck != MC)
+                    throw new RuntimeException("");// TODO:something
+                return (NodeData) iter.next();
+            }
+        };
     }
 
     @Override
     public Iterator<EdgeData> edgeIter() {
-        return (Iterator)new EdgesIterator(this);
+        return new Iterator<EdgeData>() {
+            private final int MCheck = MC;
+            private Iterator<EdgeData> iter = getEdgeColl().iterator();
+            @Override
+            public boolean hasNext() {
+                if (this.MCheck != MC)
+                    throw new RuntimeException("");// TODO:something
+                return iter.hasNext();
+            }
+
+            @Override
+            public EdgeData next() {
+                if (this.MCheck != MC)
+                    throw new RuntimeException("");// TODO:something
+                return (EdgeData) iter.next();
+            }
+        };
     }
 
     @Override
     public Iterator<EdgeData> edgeIter(int node_id) {
-        //converts the edges hashmap that going out from node_id into Collection
-        Collection<EdgeData> tempColl = this.Edges.get(node_id).values();
-        Iterator<EdgeData> iter = tempColl.iterator();//create Iterator for the above collection
-        return iter;
+        return new Iterator<EdgeData>() {
+            private final int MCheck = MC;
+            private Iterator<EdgeData> iter = Edges.get(node_id).values().iterator();
+            @Override
+            public boolean hasNext() {
+                if (this.MCheck != MC)
+                    throw new RuntimeException("");// TODO:something
+                return iter.hasNext();
+            }
+
+            @Override
+            public EdgeData next() {
+                if (this.MCheck != MC)
+                    throw new RuntimeException("");// TODO:something
+                return (EdgeData) iter.next();
+            }
+        };
     }
 
     @Override
@@ -132,6 +176,12 @@ public class DirectedWeightedGraph implements api.DirectedWeightedGraph {
         return list;
     }
 
+    /**
+     * this function Loading the graph from a Json file
+     * @param filePath -> the path for the Json file
+     * @throws IOException
+     * @throws ParseException
+     */
     public void initFromFile(String filePath) throws IOException, ParseException {
         // parsing file "G1.json"
         Object obj = new JSONParser().parse(new FileReader(filePath));
@@ -141,20 +191,25 @@ public class DirectedWeightedGraph implements api.DirectedWeightedGraph {
 
         JSONArray ja = (JSONArray) jo.get("Edges"); // getting the edges
         Iterator iter = ja.iterator();// iterating the edges
+        Map edgeMap;
         while (iter.hasNext()) {// adding the edges into the graph
-            Map edgeMap = (Map) iter.next();
+            edgeMap = (Map) iter.next();
             this.connect((int)(long)edgeMap.get("src"),
                     (int)(long)edgeMap.get("dest"),(double)edgeMap.get("w"));
         }
 
         ja = (JSONArray) jo.get("Nodes");// getting the nodes
         iter = ja.iterator();// iterating the nodes
+        Map nodeMap;
+        String[] sGeo;
+        GeoLocation geo;
+        NodeData currNode;
         while (iter.hasNext()) { // adding the nodes into the graph
-            Map nodeMap = (Map) iter.next();
-            String[] sGeo = ((String)nodeMap.get("pos")).split(",");
-            GeoLocation geo = new classes.GeoLocation(Double.parseDouble(sGeo[0]), Double.parseDouble(sGeo[1])
+            nodeMap = (Map) iter.next();
+            sGeo = ((String)nodeMap.get("pos")).split(",");
+            geo = new logicControl.GeoLocation(Double.parseDouble(sGeo[0]), Double.parseDouble(sGeo[1])
                     , Double.parseDouble(sGeo[2]));
-            NodeData currNode = new classes.NodeData((int)(long)nodeMap.get("id"), geo);
+            currNode = new logicControl.NodeData((int)(long)nodeMap.get("id"), geo);
             this.addNode(currNode);
         }
 

@@ -1,4 +1,4 @@
-package classes;
+package logicControl;
 
 import org.json.simple.parser.ParseException;
 import java.io.IOException;
@@ -6,7 +6,7 @@ import java.util.Iterator;
 
 public class TestMain {
     public static void main(String[] args) throws IOException, ParseException {
-        DirectedWeightedGraph g1 = new classes.DirectedWeightedGraph();
+        DirectedWeightedGraph g1 = new logicControl.DirectedWeightedGraph();
         g1.initFromFile("Data//G1.json");
         System.out.println(g1.edgeSize());
         System.out.println(g1.nodeSize());

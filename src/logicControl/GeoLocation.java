@@ -1,4 +1,4 @@
-package classes;
+package logicControl;
 
 public class GeoLocation implements api.GeoLocation {
 

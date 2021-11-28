@@ -1,6 +1,4 @@
-package classes;
-
-import java.awt.*;
+package logicControl;
 
 public class NodeData implements api.NodeData {
 
@@ -12,6 +10,12 @@ public class NodeData implements api.NodeData {
     public NodeData(int id, api.GeoLocation pos) {
         this.id = id;
         this.pos = pos;
+    }
+    public NodeData(NodeData n){
+        this.id = n.id;
+        this.pos = n.pos;
+        this.tag = n.tag;
+        this.weight = n.weight;
     }
 
     @Override
