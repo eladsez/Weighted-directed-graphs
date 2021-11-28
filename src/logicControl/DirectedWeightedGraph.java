@@ -69,14 +69,14 @@ public class DirectedWeightedGraph implements api.DirectedWeightedGraph {
             @Override
             public boolean hasNext() {
                 if (this.MCheck != MC)
-                    throw new RuntimeException("");// TODO:something
+                    throw new RuntimeException("The graph has changed since the iterator was constructed!");
                 return iter.hasNext();
             }
 
             @Override
             public NodeData next() {
                 if (this.MCheck != MC)
-                    throw new RuntimeException("");// TODO:something
+                    throw new RuntimeException("The graph has changed since the iterator was constructed!");
                 return (NodeData) iter.next();
             }
         };
@@ -90,14 +90,14 @@ public class DirectedWeightedGraph implements api.DirectedWeightedGraph {
             @Override
             public boolean hasNext() {
                 if (this.MCheck != MC)
-                    throw new RuntimeException("");// TODO:something
+                    throw new RuntimeException("The graph has changed since the iterator was constructed!");
                 return iter.hasNext();
             }
 
             @Override
             public EdgeData next() {
                 if (this.MCheck != MC)
-                    throw new RuntimeException("");// TODO:something
+                    throw new RuntimeException("The graph has changed since the iterator was constructed!");
                 return (EdgeData) iter.next();
             }
         };
@@ -111,14 +111,14 @@ public class DirectedWeightedGraph implements api.DirectedWeightedGraph {
             @Override
             public boolean hasNext() {
                 if (this.MCheck != MC)
-                    throw new RuntimeException("");// TODO:something
+                    throw new RuntimeException("The graph has changed since the iterator was constructed!");
                 return iter.hasNext();
             }
 
             @Override
             public EdgeData next() {
                 if (this.MCheck != MC)
-                    throw new RuntimeException("");// TODO:something
+                    throw new RuntimeException("The graph has changed since the iterator was constructed!");
                 return (EdgeData) iter.next();
             }
         };
