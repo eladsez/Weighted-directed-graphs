@@ -6,10 +6,14 @@ public class NodeData implements api.NodeData {
     private api.GeoLocation pos;
     private double weight;
     private int tag;
+    private int lowLink;
+    private int index;
+    private boolean onStack;
 
     public NodeData(int id, api.GeoLocation pos) {
         this.id = id;
         this.pos = pos;
+        this.index = -1;
     }
     public NodeData(NodeData n){
         this.id = n.id;
@@ -61,6 +65,30 @@ public class NodeData implements api.NodeData {
     @Override
     public void setTag(int t) {
         this.tag = t;
+    }
+
+    public void setLowLink(int lowLink) {
+        this.lowLink = lowLink;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public int getLowLink() {
+        return lowLink;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setOnStack(boolean onStack) {
+        this.onStack = onStack;
+    }
+
+    public boolean isOnStack() {
+        return onStack;
     }
 
     @Override
