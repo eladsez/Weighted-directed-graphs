@@ -4,7 +4,6 @@ import api.DirectedWeightedGraph;
 import api.EdgeData;
 import api.NodeData;
 import org.json.simple.parser.ParseException;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -171,15 +170,15 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
         return returnList;
     }
 
-        @Override
-    public NodeData center () {
+    @Override
+    public NodeData center() {
         Node center = null;
         double minDist = Double.MAX_VALUE;
         double currDist;
         Iterator nodeIter = this.graph.nodeIter();
         Node temp;
-        while (nodeIter.hasNext()){
-            temp = (Node)nodeIter.next();
+        while (nodeIter.hasNext()) {
+            temp = (Node) nodeIter.next();
             currDist = farestDist(temp.getKey());
             if (minDist > currDist) {
                 minDist = currDist;
@@ -189,12 +188,12 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
         return center;
     }
 
-    private double farestDist(int src){
+    private double farestDist(int src) {
         Iterator iter = this.graph.nodeIter();
         Node checkNode;
         double returnDist = -1;
         double currDist;
-        while (iter.hasNext()){
+        while (iter.hasNext()) {
             checkNode = (Node) iter.next();
             if (checkNode.getKey() == src)
                 continue;
@@ -206,33 +205,34 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
     }
 
     @Override
-    public List<NodeData> tsp (List < NodeData > cities) {
+    public List<NodeData> tsp(List<NodeData> cities) {
         return null;
     }
 
     @Override
-    public boolean save (String file){
+    public boolean save(String file) {
         try {
-            FileWriter Jfile = new FileWriter("Data//"+file);
+            FileWriter Jfile = new FileWriter("Data//" + file);
             BufferedWriter buffer = new BufferedWriter(Jfile);
             buffer.write(this.graph.toString());
             buffer.close();
             Jfile.close();
         } catch (IOException e) {
-            e.printStackTrace();
+//            e.printStackTrace(); can be added if stackTrace is needed
             return false;
         }
-
         return true;
     }
 
     @Override
-    public boolean load (String file){
+    public boolean load(String file) {
         try {
-            ((DWGraph)this.graph).initFromFile(file);
+            ((DWGraph) this.graph).initFromFile(file);
         } catch (IOException e) {
+//            e.printStackTrace(); can be added if stackTrace is needed
             return false;
         } catch (ParseException e) {
+//            e.printStackTrace(); can be added if stackTrace is needed
             return false;
         }
         return true;
