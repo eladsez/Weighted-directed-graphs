@@ -166,22 +166,51 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
     }
 
         @Override
-        public NodeData center () {
-            return null;
+    public NodeData center () {
+        Node center = null;
+        double minDist = Double.MAX_VALUE;
+        double currDist;
+        Iterator nodeIter = this.graph.nodeIter();
+        Node temp;
+        while (nodeIter.hasNext()){
+            temp = (Node)nodeIter.next();
+            currDist = farestDist(temp.getKey());
+            if (minDist > currDist) {
+                minDist = currDist;
+                center = temp;
+            }
         }
-
-        @Override
-        public List<NodeData> tsp (List < NodeData > cities) {
-            return null;
-        }
-
-        @Override
-        public boolean save (String file){
-            return false;
-        }
-
-        @Override
-        public boolean load (String file){
-            return false;
-        }
+        return center;
     }
+
+    private double farestDist(int src){
+        Iterator iter = this.graph.nodeIter();
+        Node checkNode;
+        double returnDist = -1;
+        double currDist;
+        while (iter.hasNext()){
+            checkNode = (Node) iter.next();
+            if (checkNode.getKey() == src)
+                continue;
+            currDist = shortestPathDist(src, checkNode.getKey());
+            if (returnDist < currDist)
+                returnDist = currDist;
+        }
+        return returnDist;
+    }
+
+    @Override
+    public List<NodeData> tsp (List < NodeData > cities) {
+        return null;
+    }
+
+    @Override
+    public boolean save (String file){
+        return false;
+    }
+
+    @Override
+    public boolean load (String file){
+        return false;
+    }
+}
