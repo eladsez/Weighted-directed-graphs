@@ -16,14 +16,14 @@ import java.util.*;
  * (according to the interface we were given).
  */
 
-public class DirectedWeightedGraph implements api.DirectedWeightedGraph {
+public class DWGraph implements api.DirectedWeightedGraph {
     private HashMap<Integer, NodeData> Nodes;
     private HashMap<Integer, HashMap<Integer, EdgeData>> Edges; // hash map of hashmaps > get.get in o(1)
     //<src,<dest,edge>>
     private int MC; // every time our graph changes, increase this.
     private int edgeSize;
 
-    public DirectedWeightedGraph() {
+    public DWGraph() {
         this.Nodes = new HashMap<>();
         this.Edges = new HashMap<>();
         this.MC = 0;
@@ -48,7 +48,7 @@ public class DirectedWeightedGraph implements api.DirectedWeightedGraph {
 
     @Override
     public void connect(int src, int dest, double w) {
-        EdgeData newEdge = new logicControl.EdgeData(src,dest,w);
+        EdgeData newEdge = new Edge(src,dest,w);
         if (this.Edges.containsKey(src))//checks if already exist hashmap for the edges coming out from this node
             //append newEdge into the above hashmap
             this.Edges.get(src).put(dest,newEdge);
@@ -176,6 +176,12 @@ public class DirectedWeightedGraph implements api.DirectedWeightedGraph {
         return list;
     }
 
+    public void resetRevealTime(){
+        Nodes.forEach((id, node) -> {
+            ((Node)node).setRevealTime(-1);
+        });
+    }
+
     /**
      * this function Loading the graph from a Json file
      * @param filePath -> the path for the Json file
@@ -209,7 +215,7 @@ public class DirectedWeightedGraph implements api.DirectedWeightedGraph {
             sGeo = ((String)nodeMap.get("pos")).split(",");
             geo = new logicControl.GeoLocation(Double.parseDouble(sGeo[0]), Double.parseDouble(sGeo[1])
                     , Double.parseDouble(sGeo[2]));
-            currNode = new logicControl.NodeData((int)(long)nodeMap.get("id"), geo);
+            currNode = new Node((int)(long)nodeMap.get("id"), geo);
             this.addNode(currNode);
         }
 

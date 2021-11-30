@@ -1,21 +1,21 @@
 package logicControl;
 
-public class NodeData implements api.NodeData {
+public class Node implements api.NodeData {
 
     private int id;
     private api.GeoLocation pos;
     private double weight;
     private int tag;
     private int lowLink;
-    private int index;
+    private int revealTime;//for dfs algorithm
     private boolean onStack;
 
-    public NodeData(int id, api.GeoLocation pos) {
+    public Node(int id, api.GeoLocation pos) {
         this.id = id;
         this.pos = pos;
-        this.index = -1;
+        this.revealTime = -1;
     }
-    public NodeData(NodeData n){
+    public Node(Node n){
         this.id = n.id;
         this.pos = n.pos;
         this.tag = n.tag;
@@ -71,16 +71,16 @@ public class NodeData implements api.NodeData {
         this.lowLink = lowLink;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
+    public void setRevealTime(int index) {
+        this.revealTime = index;
     }
 
     public int getLowLink() {
         return lowLink;
     }
 
-    public int getIndex() {
-        return index;
+    public int getRevealTime() {
+        return revealTime;
     }
 
     public void setOnStack(boolean onStack) {
