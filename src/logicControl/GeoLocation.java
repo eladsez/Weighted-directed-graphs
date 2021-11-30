@@ -6,12 +6,13 @@ public class GeoLocation implements api.GeoLocation {
     private double y;
     private double z;
 
-    public GeoLocation(double x, double y, double z){
+    public GeoLocation(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
 
     }
+
     @Override
     public double x() {
         return this.x;
@@ -34,10 +35,6 @@ public class GeoLocation implements api.GeoLocation {
     }
 
     public String toString() {
-        return "GeoLocation{" +
-                "x=" + x +
-                ", y=" + y +
-                ", z=" + z +
-                '}';
+        return "\"" + x + "," + y + ",0.0\"";
     }
 }

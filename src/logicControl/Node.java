@@ -93,11 +93,9 @@ public class Node implements api.NodeData {
 
     @Override
     public String toString() {
-        return "NodeData{" +
-                "id=" + id +
-                ", pos=" + pos +
-                ", weight=" + weight +
-                ", tag=" + tag +
-                '}';
+        return "{\n" +
+                "\"pos\": " + pos + ",\n" +
+                "\"id\": " + id + "\n" +
+                "}";
     }
 }

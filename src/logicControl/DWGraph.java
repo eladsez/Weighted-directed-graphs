@@ -225,4 +225,34 @@ public class DWGraph implements DirectedWeightedGraph {
         }
 
     }
+
+    @Override
+    public String toString() {
+        Iterator nodeIter = this.nodeIter();
+        Iterator edgeIter = this.edgeIter();
+        String ans =  "{\n" +
+                "\"Edges\": [\n";
+
+        while (edgeIter.hasNext()) {
+            ans += edgeIter.next().toString();
+            if (edgeIter.hasNext())
+                ans += ",\n";
+            else ans += "\n";
+        }
+
+        ans+=    "],\n" +
+                "\"Nodes\": [" ;
+
+        while (nodeIter.hasNext()) {
+            ans += nodeIter.next().toString();
+            if (nodeIter.hasNext())
+                ans += ",\n";
+            else ans += "\n";
+        }
+
+
+        ans+= "]\n" +
+                '}';
+        return ans;
+    }
 }

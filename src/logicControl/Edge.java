@@ -57,11 +57,10 @@ public class Edge implements api.EdgeData {
 
     @Override
     public String toString() {
-        return "EdgeData{" +
-                "src=" + src +
-                ", dest=" + dest +
-                ", w=" + w +
-                ", tag=" + tag +
-                '}';
+        return "{\n" +
+                "\"src\": " + src + ",\n" +
+                "\"w\": " + w + ",\n" +
+                "\"dest\": " + dest + "\n" +
+                "}";
     }
 }

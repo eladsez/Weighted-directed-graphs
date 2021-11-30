@@ -31,12 +31,7 @@ public class TestMain {
         g1.connect(5,4,1);
 
 
-
         DWGraphAlgo algo = new DWGraphAlgo();
         algo.init(g1);
-        System.out.println(algo.center());
-
-
-
     }
 }

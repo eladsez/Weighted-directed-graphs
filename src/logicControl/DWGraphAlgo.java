@@ -3,7 +3,13 @@ package logicControl;
 import api.DirectedWeightedGraph;
 import api.EdgeData;
 import api.NodeData;
+import org.json.simple.parser.ParseException;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.Buffer;
 import java.util.*;
 
 public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
@@ -206,11 +212,29 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
 
     @Override
     public boolean save (String file){
-        return false;
+        try {
+            FileWriter Jfile = new FileWriter("Data//"+file);
+            BufferedWriter buffer = new BufferedWriter(Jfile);
+            buffer.write(this.graph.toString());
+            buffer.close();
+            Jfile.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 
     @Override
     public boolean load (String file){
-        return false;
+        try {
+            ((DWGraph)this.graph).initFromFile(file);
+        } catch (IOException e) {
+            return false;
+        } catch (ParseException e) {
+            return false;
+        }
+        return true;
     }
 }
