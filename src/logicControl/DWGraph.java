@@ -1,5 +1,6 @@
 package logicControl;
 
+import api.DirectedWeightedGraph;
 import api.EdgeData;
 import api.GeoLocation;
 import api.NodeData;
@@ -16,7 +17,7 @@ import java.util.*;
  * (according to the interface we were given).
  */
 
-public class DWGraph implements api.DirectedWeightedGraph {
+public class DWGraph implements DirectedWeightedGraph {
     private HashMap<Integer, NodeData> Nodes;
     private HashMap<Integer, HashMap<Integer, EdgeData>> Edges; // hash map of hashmaps > get.get in o(1)
     //<src,<dest,edge>>
@@ -28,6 +29,10 @@ public class DWGraph implements api.DirectedWeightedGraph {
         this.Edges = new HashMap<>();
         this.MC = 0;
         this.edgeSize = 0;
+    }
+
+    public boolean hasAdj(int src) { // checks if the src node has any edges coming out of him
+        return this.Edges.containsKey(src);
     }
 
     @Override
