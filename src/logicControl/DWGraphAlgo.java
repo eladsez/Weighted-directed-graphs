@@ -76,6 +76,8 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
         Node adjNode = null;
         while (adjIter.hasNext()) {
             adjNode = (Node) graph.getNode(((Edge) adjIter.next()).getDest());
+            if (!((DWGraph) this.graph).hasAdj(adjNode.getKey()))
+                continue;
             if (adjNode.getRevealTime() == -1) {
                 strongConnect(adjNode, stack, components);
                 node.setLowLink(Math.min(node.getLowLink(), adjNode.getLowLink()));

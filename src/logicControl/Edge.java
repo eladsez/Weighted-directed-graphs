@@ -1,12 +1,22 @@
 package logicControl;
 
-public class Edge implements api.EdgeData {
+/**
+ * Edge class
+ * */
 
+public class Edge implements api.EdgeData {
+    /**
+     * src -> source node of the edge
+     * dest -> destination node of the edge
+     * w -> the weight of the edge (e.g. length)
+     * tag -> for the gui
+     * */
     private int src;
     private int dest;
     private double w; ///Weight
     private int tag;
 
+    //constructors
     public Edge(int src, int dest, double w) {
         this.src = src;
         this.dest = dest;
