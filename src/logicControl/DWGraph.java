@@ -18,6 +18,12 @@ import java.util.*;
  */
 
 public class DWGraph implements DirectedWeightedGraph {
+    /**
+     * Nodes -> HashMap the contains all the nodes of the graph
+     * Edges -> HashMap the contains all the edges of the graph, each edge is represented with a hashMap
+     * MC -> keeps track of the changes that was done on the graph
+     * edgeSize
+     * */
     private HashMap<Integer, NodeData> Nodes;
     private HashMap<Integer, HashMap<Integer, EdgeData>> Edges; // hash map of hashmaps > get.get in o(1)
     //<src,<dest,edge>>

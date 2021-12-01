@@ -1,7 +1,19 @@
 package logicControl;
 
-public class Node implements api.NodeData {
+/**
+ * Node class
+ * */
 
+public class Node implements api.NodeData {
+    /**
+     * id -> id
+     * pos -> geolocation position
+     * weight -> the weight of the node - not relevant for this assignment
+     * tag -> tag for the gui
+     * lowLink -> for the connected algorithm
+     * revealTime -> for the dfs algorithm
+     * onStack -> a boolean that say if a node is in the stack - for the connected algorithm
+     * */
     private int id;
     private api.GeoLocation pos;
     private double weight;
@@ -10,10 +22,11 @@ public class Node implements api.NodeData {
     private int revealTime;//for dfs algorithm
     private boolean onStack;
 
+    //constructors
     public Node(int id, api.GeoLocation pos) {
         this.id = id;
         this.pos = pos;
-        this.revealTime = -1;
+        this.revealTime = -1; //initialized to -1
     }
     public Node(Node n){
         this.id = n.id;
@@ -49,12 +62,12 @@ public class Node implements api.NodeData {
 
     @Override
     public String getInfo() {
-        return null; ////// complete
+        return null; ////// TODO
     }
 
     @Override
     public void setInfo(String s) {
-        ////// complete
+        ////// TODO
     }
 
     @Override
