@@ -30,11 +30,10 @@ public class TestMain {
         g.connect(5,3,1);
         g.connect(5,4,1);
 
-
-
         DWGraphAlgo algo = new DWGraphAlgo();
         algo.init(g);
-        boolean a = algo.load("Data//h.json");
+        algo.load("Data//G1.json");
+        boolean a = algo.save("bla.json");
         System.out.println(a);
         System.out.println(algo.getGraph());
 

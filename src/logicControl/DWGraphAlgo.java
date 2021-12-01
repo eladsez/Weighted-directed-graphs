@@ -1,14 +1,11 @@
 package logicControl;
 
 import api.DirectedWeightedGraph;
-import api.EdgeData;
 import api.NodeData;
 import org.json.simple.parser.ParseException;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.Buffer;
 import java.util.*;
 
 public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
@@ -18,7 +15,10 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
 
     @Override
     public void init(DirectedWeightedGraph g) {
-        this.graph = g;
+        if (g == null){
+            this.graph = new DWGraph();
+        }
+        else this.graph = g;
     }
 
     @Override
