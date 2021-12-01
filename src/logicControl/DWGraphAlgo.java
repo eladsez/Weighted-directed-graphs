@@ -293,7 +293,7 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
     @Override
     public boolean save(String file) {
         try {
-            FileWriter Jfile = new FileWriter("Data//" + file);
+            FileWriter Jfile = new FileWriter(file);
             BufferedWriter buffer = new BufferedWriter(Jfile);
             buffer.write(this.graph.toString());
             buffer.close();
