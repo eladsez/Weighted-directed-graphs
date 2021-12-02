@@ -2,11 +2,11 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Line2D;
 
-public class EdgesLine extends JPanel {
+public class DrawPanel extends JPanel {
 
-    public EdgesLine() {
+
+    public DrawPanel() {
         this.setPreferredSize(new Dimension(500,500));
     }
 
@@ -25,14 +25,18 @@ public class EdgesLine extends JPanel {
         yn = xn*sin + yn*cos + y1;
         xn = x;
 
-        int[] xpoints = {x2, (int) xm, (int) xn};
-        int[] ypoints = {y2, (int) ym, (int) yn};
+        int[] xpoints = {x2 + 2, (int) xm, (int) xn};
+        int[] ypoints = {y2 + 2, (int) ym, (int) yn};
         g2.setStroke(new BasicStroke(3));
         g2.drawLine(x1, y1, x2, y2);
         g2.fillPolygon(xpoints, ypoints, 3);
     }
 
-    public void paint(Graphics g){
-        drawArrowLine(g, 0,0,250,250,15,10);
+    @Override
+    public void paintComponent(Graphics g){
+        drawArrowLine(g, 100,100,250,250,7,5);
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setColor(Color.BLUE);
+        g2.fillOval(250,250,10,10);
     }
 }

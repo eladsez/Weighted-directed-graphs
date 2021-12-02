@@ -4,6 +4,7 @@ import api.DirectedWeightedGraph;
 import api.DirectedWeightedGraphAlgorithms;
 import logicControl.DWGraph;
 import logicControl.DWGraphAlgo;
+import logicControl.Edge;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,12 +12,13 @@ import java.awt.*;
 public class MainFrame extends JFrame {
 
     DWGraphAlgo gAlgo;
-    EdgesLine edges;
+    DrawPanel panel = new DrawPanel();
 
     public MainFrame(DirectedWeightedGraphAlgorithms gAlgo) throws HeadlessException {
         this.gAlgo = (DWGraphAlgo) gAlgo;
-        this.edges = new EdgesLine();
-        this.add(edges);
+
+        this.add(panel);
+        this.setSize(500,500);
         this.pack();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
@@ -24,9 +26,6 @@ public class MainFrame extends JFrame {
     }
 
     public static void main(String[] args) {
-        DWGraphAlgo algo = new DWGraphAlgo();
-        algo.init(null);
-        algo.load("Data//G1.json");
-        MainFrame frame = new MainFrame(algo);
+        MainFrame frame = new MainFrame(null);
     }
 }
