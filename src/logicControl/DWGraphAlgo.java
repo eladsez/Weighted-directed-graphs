@@ -32,6 +32,10 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
     private DirectedWeightedGraph graph;
     private int time;
 
+    public DWGraphAlgo() {
+        this.graph = new DWGraph();
+    }
+
     /**
      * Inits the graph on which this set of algorithms operates on.
      *
