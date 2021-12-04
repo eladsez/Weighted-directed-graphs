@@ -8,13 +8,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Iterator;
 
-public class DrawPanel extends JPanel {
+public class DrawGraphPanel extends JPanel {
 
     private DWGraph graph;
     private int[] nodeXpos;
     private int[] nodeYpos;
+    private Graphics panlG;
 
-    public DrawPanel(DWGraph g) {
+    public DrawGraphPanel(DWGraph g) {
         this.graph = g;
         this.nodeXpos = new int[g.nodeSize()];
         this.nodeYpos = new int[g.nodeSize()];
@@ -23,7 +24,7 @@ public class DrawPanel extends JPanel {
 
     @Override
     public void paintComponent(Graphics g){
-//        drawArrowLine(g, 100,100,250,250,7,5);
+        this.panlG = g;
         updateArr();
         drawEdges(g);
         drawNodes(g);
@@ -49,10 +50,10 @@ public class DrawPanel extends JPanel {
         int x, y;
         while (iter.hasNext()){
             curr = (Node) iter.next();
-//            g2.setColor(new Color(160,160,160));
-//            g2.setStroke(new BasicStroke(3));
-//            g2.setFont(new Font("Microsoft YaHei", Font.CENTER_BASELINE, 10));
-//            g2.drawString(Integer.toString(curr.getKey()), this.nodeXpos[curr.getKey()], this.nodeYpos[curr.getKey()] - 2);
+            g2.setColor(new Color(160,160,160));
+            g2.setStroke(new BasicStroke(3));
+            g2.setFont(new Font("Serif", Font.CENTER_BASELINE, 20));
+            g2.drawString(Integer.toString(curr.getKey()), this.nodeXpos[curr.getKey()], this.nodeYpos[curr.getKey()] - 2);
             g2.setColor(Color.BLACK);
             g2.fillOval(this.nodeXpos[curr.getKey()],this.nodeYpos[curr.getKey()],10,10);
         }

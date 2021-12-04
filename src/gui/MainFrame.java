@@ -1,34 +1,81 @@
 package gui;
 
-import api.DirectedWeightedGraph;
 import api.DirectedWeightedGraphAlgorithms;
 import logicControl.DWGraph;
 import logicControl.DWGraphAlgo;
-import logicControl.Edge;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class MainFrame extends JFrame {
+public class MainFrame extends JFrame implements ActionListener {
 
+    static GraphicsDevice device = GraphicsEnvironment
+            .getLocalGraphicsEnvironment().getScreenDevices()[0];
     DWGraphAlgo gAlgo;
-    DrawPanel panel;
+    private JPanel buttonsPanel;
+    private DrawGraphPanel panel;
+    private JButton fullScreen;
+    private JButton exitFS;
+    private JFrame menuParent;
+    private JButton returnToMenu;
 
-    public MainFrame(DirectedWeightedGraphAlgorithms gAlgo) throws HeadlessException {
-        this.gAlgo = (DWGraphAlgo) gAlgo;
-        this.panel = new DrawPanel((DWGraph) gAlgo.getGraph());
+    public MainFrame(DWGraphAlgo gAlgo, JFrame menu) throws HeadlessException {
+        this.buttonsPanel = new JPanel(new GridLayout(1,2,0,0));
+        this.menuParent = menu;
+        this.gAlgo = gAlgo;
+        this.panel = new DrawGraphPanel((DWGraph) gAlgo.getGraph());
+        this.fullScreen = new JButton("Full screen");
+        this.exitFS = new JButton("Exit full screen");
+        this.returnToMenu = new JButton("Return to menu");
+
+        Color color = new Color(0,160,160);
+        Font font = new Font("Serif", Font.PLAIN, 20);
+        this.exitFS.setVisible(false);
+        this.exitFS.setBounds(680,0, 220,30);
+        this.buttonsPanel.setBounds(30,2,440,30);
+        this.fullScreen.addActionListener(this);
+        this.exitFS.addActionListener(this);
+        this.returnToMenu.addActionListener(this);
+
+        this.buttonsPanel.add(returnToMenu);
+        this.buttonsPanel.add(fullScreen);
+        this.add(exitFS);
+        this.add(buttonsPanel);
         this.add(panel);
-        this.setSize(500,500);
+
+
         this.pack();
-        this.setBackground(new Color(0,51,51));
+        this.setBackground(color);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+
+
     }
 
-    public static void main(String[] args) {
-        DWGraphAlgo algo = new DWGraphAlgo();
-        algo.load("Data//G1.json");
-        MainFrame frame = new MainFrame(algo);
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == fullScreen) {
+            device.setFullScreenWindow(this);
+            this.buttonsPanel.setVisible(false);
+            this.exitFS.setVisible(true);
+        }
+
+        if (e.getSource() == exitFS){
+            device.setFullScreenWindow(null);
+            this.buttonsPanel.setVisible(true);
+            this.exitFS.setVisible(false);
+        }
+
+        if (e.getSource() == returnToMenu){
+            this.menuParent.setVisible(true);
+            this.dispose();
+        }
+
+
+
     }
 }
+
