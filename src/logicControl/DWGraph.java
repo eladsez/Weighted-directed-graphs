@@ -270,6 +270,11 @@ public class DWGraph implements DirectedWeightedGraph {
      * @throws ParseException
      */
     public void initFromFile(String filePath) throws IOException, ParseException {
+        this.Nodes = new HashMap<>();
+        this.Edges = new HashMap<>();
+        this.MC = 0;
+        this.edgeSize = 0;
+
         // parsing file "G1.json"
         Object obj = new JSONParser().parse(new FileReader(filePath));
 

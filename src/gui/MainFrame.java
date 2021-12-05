@@ -5,6 +5,7 @@ import logicControl.DWGraph;
 import logicControl.DWGraphAlgo;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,6 +33,12 @@ public class MainFrame extends JFrame implements ActionListener {
 
         Color color = new Color(0,160,160);
         Font font = new Font("Serif", Font.PLAIN, 20);
+        this.fullScreen.setBackground(color);
+        this.exitFS.setBackground(color);
+        this.returnToMenu.setBackground(color);
+        this.fullScreen.setBorder(new LineBorder(Color.BLACK));
+        this.exitFS.setBorder(new LineBorder(Color.BLACK));
+        this.returnToMenu.setBorder(new LineBorder(Color.BLACK));
         this.exitFS.setVisible(false);
         this.exitFS.setBounds(680,0, 220,30);
         this.buttonsPanel.setBounds(30,2,440,30);
@@ -45,7 +52,7 @@ public class MainFrame extends JFrame implements ActionListener {
         this.add(buttonsPanel);
         this.add(panel);
 
-
+        this.setResizable(false);
         this.pack();
         this.setBackground(color);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

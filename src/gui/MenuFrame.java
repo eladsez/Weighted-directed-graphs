@@ -27,6 +27,7 @@ public class MenuFrame extends JFrame implements ActionListener {
 
 
     public MenuFrame(){
+        this.setTitle("Graph Algorithms");
         this.setLayout(new FlowLayout(FlowLayout.CENTER));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocation(529,219);
@@ -82,7 +83,6 @@ public class MenuFrame extends JFrame implements ActionListener {
         this.add(currG);
         this.add(graphButtonsPanel);
         this.add(allAlgo);
-
 
 
         this.setSize(550,500);

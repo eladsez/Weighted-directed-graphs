@@ -29,7 +29,7 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
      * graph -> the graph
      * time -> Discovery time for dfs
      */
-    private DirectedWeightedGraph graph;
+    private DWGraph graph;
     private int time;
 
     public DWGraphAlgo() {
@@ -45,7 +45,7 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
     public void init(DirectedWeightedGraph g) {
         if (g == null) {
             this.graph = new DWGraph();
-        } else this.graph = g;
+        } else this.graph = (DWGraph) g;
     }
 
     @Override
@@ -322,7 +322,7 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
     @Override
     public boolean load(String file) {
         try {
-            ((DWGraph) this.graph).initFromFile(file);
+            this.graph.initFromFile(file);
         } catch (IOException e) {
 //            e.printStackTrace(); can be added if stackTrace is needed
             return false;

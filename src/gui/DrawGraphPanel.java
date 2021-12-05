@@ -13,9 +13,10 @@ public class DrawGraphPanel extends JPanel {
     private DWGraph graph;
     private int[] nodeXpos;
     private int[] nodeYpos;
-    private Graphics panlG;
+    private Graphics panelG;
 
     public DrawGraphPanel(DWGraph g) {
+        this.setLayout(null);
         this.graph = g;
         this.nodeXpos = new int[g.nodeSize()];
         this.nodeYpos = new int[g.nodeSize()];
@@ -24,38 +25,66 @@ public class DrawGraphPanel extends JPanel {
 
     @Override
     public void paintComponent(Graphics g){
-        this.panlG = g;
+        this.panelG = g;
         updateArr();
         drawEdges(g);
         drawNodes(g);
+
     }
 
     private void updateArr() {
         Iterator iter = this.graph.nodeIter();
         Node curr;
-        int x, y;
-        while (iter.hasNext()) {
+        double minX = Double.MAX_VALUE, minY = Double.MAX_VALUE, maxX = Double.MIN_VALUE, maxY = Double.MIN_VALUE;
+        double x,y;
+        while (iter.hasNext()){
             curr = (Node) iter.next();
-            x = (int) ((curr.getPos().x() * 100000) % 1000);
-            y = (int) ((curr.getPos().y() * 100000) % 1000);
-            this.nodeXpos[curr.getKey()] = x;
-            this.nodeYpos[curr.getKey()] = y;
+            x = curr.getPos().x();
+            y = curr.getPos().y();
+            minX = Math.min(minX,x);
+            minY = Math.min(minY,y);
+            maxX = Math.max(maxX,x);
+            maxY = Math.max(maxY,y);
         }
+        double uintX = 1500/(maxX - minX);
+        double unitY = 800/(maxY - minY);
+
+        iter = this.graph.nodeIter();
+
+        while (iter.hasNext()){
+            curr = (Node) iter.next();
+            x = (curr.getPos().x() - minX) * uintX;
+            y = (curr.getPos().y() - minY) * unitY;
+
+            this.nodeXpos[curr.getKey()] = (int) x;
+            this.nodeYpos[curr.getKey()] = (int) y;
+
+        }
+
+//        int x,y;
+//        while (iter.hasNext()) {
+//            curr = (Node) iter.next();
+//            x = (int) ((curr.getPos().x() * 100000) % 1000);
+//            y = (int) ((curr.getPos().y() * 100000) % 1000);
+//            this.nodeXpos[curr.getKey()] = x;
+//            this.nodeYpos[curr.getKey()] = y;
+//        }
     }
 
     private void drawNodes(Graphics g){
         Iterator iter = this.graph.nodeIter();
         Graphics2D g2 = (Graphics2D) g;
         Node curr;
-        int x, y;
+
         while (iter.hasNext()){
             curr = (Node) iter.next();
-            g2.setColor(new Color(160,160,160));
-            g2.setStroke(new BasicStroke(3));
-            g2.setFont(new Font("Serif", Font.CENTER_BASELINE, 20));
-            g2.drawString(Integer.toString(curr.getKey()), this.nodeXpos[curr.getKey()], this.nodeYpos[curr.getKey()] - 2);
+            g2.setColor(Color.RED);
+//            System.out.println(this.nodeXpos[curr.getKey()]+","+this.nodeYpos[curr.getKey()]);
+            g2.fillOval(this.nodeXpos[curr.getKey()],this.nodeYpos[curr.getKey()],27,27);
             g2.setColor(Color.BLACK);
-            g2.fillOval(this.nodeXpos[curr.getKey()],this.nodeYpos[curr.getKey()],10,10);
+            g2.setStroke(new BasicStroke(2));
+            g2.setFont(new Font("Serif", Font.CENTER_BASELINE, 15));
+            g2.drawString(Integer.toString(curr.getKey()), this.nodeXpos[curr.getKey()] + 6, this.nodeYpos[curr.getKey()] + 17);
         }
     }
 
@@ -66,8 +95,8 @@ public class DrawGraphPanel extends JPanel {
         g.setColor(new Color(0,0,0));
         while (iter.hasNext()){
             curr = (Edge) iter.next();
-            drawArrowLine(g2,this.nodeXpos[curr.getSrc()], this.nodeYpos[curr.getSrc()], this.nodeXpos[curr.getDest()]
-            , this.nodeYpos[curr.getDest()], 10, 7);
+            drawArrowLine(g2,this.nodeXpos[curr.getSrc()] + 12, this.nodeYpos[curr.getSrc()] + 12, this.nodeXpos[curr.getDest()]  + 12
+            , this.nodeYpos[curr.getDest()]  + 12, 30, 7);
         }
     }
 
@@ -90,7 +119,6 @@ public class DrawGraphPanel extends JPanel {
         g2.setStroke(new BasicStroke(2));
         g2.setColor(Color.BLACK);
         g2.drawLine(x1, y1, x2, y2);
-        g2.setColor(new Color(204,229,255));
         g2.fillPolygon(xpoints, ypoints, 3);
     }
 }
