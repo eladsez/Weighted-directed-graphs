@@ -3,13 +3,13 @@ package gui;
 import logicControl.DWGraph;
 import logicControl.Edge;
 import logicControl.Node;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.Iterator;
 
 public class DrawGraphPanel extends JPanel {
 
+    static Dimension screenSize;
     private DWGraph graph;
     private int[] nodeXpos;
     private int[] nodeYpos;
@@ -20,7 +20,8 @@ public class DrawGraphPanel extends JPanel {
         this.graph = g;
         this.nodeXpos = new int[g.nodeSize()];
         this.nodeYpos = new int[g.nodeSize()];
-        this.setPreferredSize(new Dimension(500,500));
+        this.screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setPreferredSize(screenSize);
     }
 
     @Override
@@ -46,8 +47,8 @@ public class DrawGraphPanel extends JPanel {
             maxX = Math.max(maxX,x);
             maxY = Math.max(maxY,y);
         }
-        double uintX = 1500/(maxX - minX);
-        double unitY = 800/(maxY - minY);
+        double uintX = this.screenSize.width/(maxX - minX) * 0.9;
+        double unitY = this.screenSize.height/(maxY - minY) * 0.8;
 
         iter = this.graph.nodeIter();
 
@@ -79,11 +80,10 @@ public class DrawGraphPanel extends JPanel {
         while (iter.hasNext()){
             curr = (Node) iter.next();
             g2.setColor(Color.RED);
-//            System.out.println(this.nodeXpos[curr.getKey()]+","+this.nodeYpos[curr.getKey()]);
-            g2.fillOval(this.nodeXpos[curr.getKey()],this.nodeYpos[curr.getKey()],27,27);
+            g2.fillOval(this.nodeXpos[curr.getKey()],this.nodeYpos[curr.getKey()],22,22);
             g2.setColor(Color.BLACK);
             g2.setStroke(new BasicStroke(2));
-            g2.setFont(new Font("Serif", Font.CENTER_BASELINE, 15));
+            g2.setFont(new Font("Serif", Font.CENTER_BASELINE, 12));
             g2.drawString(Integer.toString(curr.getKey()), this.nodeXpos[curr.getKey()] + 6, this.nodeYpos[curr.getKey()] + 17);
         }
     }
@@ -93,10 +93,15 @@ public class DrawGraphPanel extends JPanel {
         Iterator iter = this.graph.edgeIter();
         Edge curr;
         g.setColor(new Color(0,0,0));
+        float xAvg, yAvg;
         while (iter.hasNext()){
             curr = (Edge) iter.next();
-            drawArrowLine(g2,this.nodeXpos[curr.getSrc()] + 12, this.nodeYpos[curr.getSrc()] + 12, this.nodeXpos[curr.getDest()]  + 12
-            , this.nodeYpos[curr.getDest()]  + 12, 30, 7);
+            drawArrowLine(g2,this.nodeXpos[curr.getSrc()] + 12, this.nodeYpos[curr.getSrc()] + 12, this.nodeXpos[curr.getDest()]  + 10
+            , this.nodeYpos[curr.getDest()]  + 10, 30, 7);
+            xAvg = (this.nodeXpos[curr.getSrc()] + this.nodeXpos[curr.getDest()]) / 2;
+            yAvg = (this.nodeYpos[curr.getSrc()] + this.nodeYpos[curr.getDest()]) / 2;
+            g2.setColor(Color.WHITE);
+            g2.drawString(Double.toString(curr.getWeight()), xAvg, yAvg);
         }
     }
 

@@ -80,8 +80,7 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
      */
     @Override
     public boolean isConnected() {
-        int i = tarjan().size();
-        return i == 1;
+        return (1 == tarjan().size());
     }
 
     /**
@@ -148,33 +147,36 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
      */
     @Override
     public double shortestPathDist(int src, int dest) {
-        HashMap<Integer, Double> dist = new HashMap<>();
-//        HashMap<Integer, Boolean> haveSeen = new HashMap(); TODO: optimization attempt to reduce the scope of the iterator
-        Iterator nodeIter = this.graph.nodeIter();
+        Iterator Iter = this.graph.nodeIter();
+        PriorityQueue<Node> pq = new PriorityQueue(new NodeComparator());//priority queue sorting by the d(node)
         Node curr;
-        while (nodeIter.hasNext()) {
-            curr = (Node) nodeIter.next();
+        while (Iter.hasNext()) {// initial all the d(node) to infinite and d(srcNode) = 0
+            curr = (Node) Iter.next();
             if (curr.getKey() == src)
-                dist.put(curr.getKey(), 0.0);
+                curr.setWeight(0);
             else
-                dist.put(curr.getKey(), Double.MAX_VALUE);
+                curr.setWeight(Double.MAX_VALUE);
+            pq.add(curr); // adding the node to the priority queue
         }
-        nodeIter = this.graph.nodeIter();
-        Iterator adjIter;
         Node adjNode;
-        Edge adjEdge;
-        while (nodeIter.hasNext()) {
-            curr = (Node) nodeIter.next();
-            if (!((DWGraph) this.graph).hasAdj(curr.getKey()))
+        Edge connEdge;
+        while (!pq.isEmpty()){
+            curr = pq.poll(); // poll the node with minimum d(node)
+
+            if (!this.graph.hasAdj(curr.getKey()))// checking if curr have any edges coming out of him
                 continue;
-            adjIter = this.graph.edgeIter(curr.getKey());
-            while (adjIter.hasNext()) {
-                adjEdge = (Edge) adjIter.next();
-                adjNode = (Node) this.graph.getNode(adjEdge.getDest());
-                dist.put(adjNode.getKey(), Math.min(dist.get(adjNode.getKey()), dist.get(curr.getKey()) + adjEdge.getWeight()));
+
+            Iter = this.graph.edgeIter(curr.getKey());
+            while (Iter.hasNext()){ // for each edge leaving curr
+                connEdge = (Edge) Iter.next();
+                 adjNode = (Node) this.graph.getNode(connEdge.getDest());
+                if (adjNode.getWeight() > curr.getWeight() + connEdge.getWeight())
+                    adjNode.setWeight(curr.getWeight() + connEdge.getWeight());
             }
         }
-        return dist.get(dest);
+        double ans = this.graph.getNode(dest).getWeight();
+        this.graph.resetNodeW(); // reset the nodes weight to -1
+        return ans;
     }
 
     /**
@@ -189,42 +191,42 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
      */
     @Override
     public List<NodeData> shortestPath(int src, int dest) {
-        HashMap<Integer, Double> dist = new HashMap<>();
-        HashMap<Integer, Node> prev = new HashMap<>();
-        Iterator nodeIter = this.graph.nodeIter();
+        HashMap<Integer, Node> dad = new HashMap<>();// = hashmap <node.key,dadNode>
+        Iterator Iter = this.graph.nodeIter();
+        PriorityQueue<Node> pq = new PriorityQueue(new NodeComparator());//priority queue sorting by the d(node)
         Node curr;
-        while (nodeIter.hasNext()) {
-            curr = (Node) nodeIter.next();
+        while (Iter.hasNext()) {// initial all the d(node) to infinite and d(srcNode) = 0
+            curr = (Node) Iter.next();
             if (curr.getKey() == src)
-                dist.put(curr.getKey(), 0.0);
+                curr.setWeight(0);
             else
-                dist.put(curr.getKey(), Double.MAX_VALUE);
+                curr.setWeight(Double.MAX_VALUE);
+            pq.add(curr); // adding the node to the priority queue
         }
-        nodeIter = this.graph.nodeIter();
-        Iterator adjIter;
         Node adjNode;
-        Edge adjEdge;
-        double sumOfDist;
-        while (nodeIter.hasNext()) {
-            curr = (Node) nodeIter.next();
-            if (!((DWGraph) this.graph).hasAdj(curr.getKey()))
+        Edge connEdge;
+        while (!pq.isEmpty()){
+            curr = pq.poll(); // poll the node with minimum d(node)
+
+            if (!this.graph.hasAdj(curr.getKey()))// checking if curr have any edges coming out of him
                 continue;
-            adjIter = this.graph.edgeIter(curr.getKey());
-            while (adjIter.hasNext()) {
-                adjEdge = (Edge) adjIter.next();
-                adjNode = (Node) this.graph.getNode(adjEdge.getDest());
-                sumOfDist = dist.get(curr.getKey()) + adjEdge.getWeight();
-                if (sumOfDist < dist.get(adjNode.getKey())) {
-                    dist.put(adjNode.getKey(), sumOfDist);
-                    prev.put(adjNode.getKey(), curr);
+
+            Iter = this.graph.edgeIter(curr.getKey());
+            while (Iter.hasNext()){ // for each edge leaving curr
+                connEdge = (Edge) Iter.next();
+                adjNode = (Node) this.graph.getNode(connEdge.getDest());
+                if (adjNode.getWeight() > curr.getWeight() + connEdge.getWeight()) {
+                    adjNode.setWeight(curr.getWeight() + connEdge.getWeight());
+                    dad.put(adjNode.getKey(), curr);
                 }
             }
         }
-        List returnList = new Vector();
-        Node minPath = (Node) this.graph.getNode(dest);
-        while (minPath != this.graph.getNode(src)) {
-            returnList.add(minPath);
-            minPath = prev.get(minPath.getKey());
+        this.graph.resetNodeW(); // reset the nodes weight to -1
+        List returnList= new Vector<Node> ();// list to collect the path
+        curr = (Node) this.graph.getNode(dest);
+        while (curr != this.graph.getNode(src)) {
+            returnList.add(curr);
+            curr = dad.get(curr.getKey());
         }
         returnList.add(this.graph.getNode(src));
         Collections.reverse(returnList);
@@ -240,6 +242,7 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
      */
     @Override
     public NodeData center() {
+        //TODO add if (graph is connected)
         Node center = null;
         double minDist = Double.MAX_VALUE;
         double currDist;
@@ -256,13 +259,26 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
         return center;
     }
 
+    public NodeData centerTry(){
+        Node center = (Node) this.graph.getNode(0);
+        double minDist = Double.MAX_VALUE;
+        double currDist;
+        Iterator iter = this.graph.nodeIter();
+
+        while (iter.hasNext()){
+//            currDist = //the longest path from this node
+        }
+
+        return null;
+    }
+
     /**
      * helper function to the center function
      */
     private double farestDist(int src) {
         Iterator iter = this.graph.nodeIter();
         Node checkNode;
-        double returnDist = -1;
+        double returnDist = Double.MIN_VALUE;
         double currDist;
         while (iter.hasNext()) {
             checkNode = (Node) iter.next();
@@ -331,5 +347,16 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
             return false;
         }
         return true;
+    }
+
+    private class NodeComparator implements Comparator<Node>{
+        @Override
+        public int compare(Node n1, Node n2) {
+            if (n1.getWeight() < n2.getWeight())
+                return -1;
+            else if (n1.getWeight() > n2.getWeight())
+                return 1;
+            return 0;
+        }
     }
 }

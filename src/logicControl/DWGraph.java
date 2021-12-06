@@ -170,6 +170,7 @@ public class DWGraph implements DirectedWeightedGraph {
                     throw new RuntimeException("The graph has changed since the iterator was constructed!");
                 return (EdgeData) iter.next();
             }
+
         };
     }
 
@@ -259,6 +260,12 @@ public class DWGraph implements DirectedWeightedGraph {
     public void resetRevealTime() {
         Nodes.forEach((id, node) -> {
             ((Node) node).setRevealTime(-1);
+        });
+    }
+
+    public void resetNodeW(){
+        Nodes.forEach((id, node) -> {
+            node.setWeight(-1);
         });
     }
 
