@@ -1,5 +1,11 @@
 import api.DirectedWeightedGraph;
 import api.DirectedWeightedGraphAlgorithms;
+import gui.MainFrame;
+import logicControl.DWGraph;
+import logicControl.DWGraphAlgo;
+import org.json.simple.parser.ParseException;
+
+import java.io.IOException;
 
 /**
  * This class is the main class for Ex2 - your implementation will be tested using this class.
@@ -11,10 +17,14 @@ public class Ex2 {
      * @return
      */
     public static DirectedWeightedGraph getGrapg(String json_file) {
-        DirectedWeightedGraph ans = null;
-        // ****** Add your code here ******
-        //
-        // ********************************
+        DirectedWeightedGraph ans = new DWGraph();
+        try {
+            ((DWGraph)ans).initFromFile(json_file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         return ans;
     }
     /**
@@ -23,10 +33,8 @@ public class Ex2 {
      * @return
      */
     public static DirectedWeightedGraphAlgorithms getGrapgAlgo(String json_file) {
-        DirectedWeightedGraphAlgorithms ans = null;
-        // ****** Add your code here ******
-        //
-        // ********************************
+        DirectedWeightedGraphAlgorithms ans = new DWGraphAlgo();
+        ans.load(json_file);
         return ans;
     }
     /**
@@ -36,8 +44,11 @@ public class Ex2 {
      */
     public static void runGUI(String json_file) {
         DirectedWeightedGraphAlgorithms alg = getGrapgAlgo(json_file);
-        // ****** Add your code here ******
-        //
-        // ********************************
+        new MainFrame(alg);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(getGrapg("Data/G1.json"));
+        runGUI("Data/G1.json");
     }
 }

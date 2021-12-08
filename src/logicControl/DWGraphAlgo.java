@@ -31,10 +31,12 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
      * time -> Discovery time for dfs
      */
     private DWGraph graph;
-    private int time;
 
     public DWGraphAlgo() {
         this.graph = new DWGraph();
+    }
+    public DWGraphAlgo(DirectedWeightedGraph graph) {
+        this.graph = (DWGraph) graph;
     }
 
     /**
