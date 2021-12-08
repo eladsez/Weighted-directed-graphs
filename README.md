@@ -35,7 +35,12 @@ Approach: we are searching for the node with the shortest path, but from the lon
 We've implemented the algorithm in the following way:    
   1. loop through all of the nodes in the graph.
   2. for each node check with `shortestPathDist` what is the **longest** path
-  3. return the node with the shortest one.
+  3. return the node with the shortest one.  
+
+* `tsp` - return the shrotest path between a list of nodes.   
+Approach: we are usuing greedy algorithm, in order to get an acceptble path at reasonble time.
+We've implemented the algorithm in the following way:    
+  1. 
 
 
 ## Structure:  
