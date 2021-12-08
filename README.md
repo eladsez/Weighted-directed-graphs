@@ -35,7 +35,7 @@ Approach: we are searching for the node with the shortest path, but from the lon
 We've implemented the algorithm in the following way:    
   1. loop through all of the nodes in the graph.
   2. for each node check with `shortestPathDist` what is the **longest** path
-  3. the results are then inserted into a list and returned.
+  3. return the node with the shortest one.
 
 
 ## Structure:  
