@@ -129,7 +129,7 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
     @Override
     public double shortestPathDist(int src, int dest) {
         Iterator Iter = this.graph.nodeIter();
-        PriorityQueue<Node> pq = new PriorityQueue(new NodeComparator());//priority queue sorting by the d(node)
+        LinkedList<Node> pq = new LinkedList();//priority queue sorting by the d(node)
         Node curr;
         while (Iter.hasNext()) {// initial all the d(node) to infinite and d(srcNode) = 0
             curr = (Node) Iter.next();
@@ -142,7 +142,8 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
         Node adjNode;
         Edge connEdge;
         while (!pq.isEmpty()){
-            curr = pq.poll(); // poll the node with minimum d(node)
+            pq.sort(new NodeComparator());
+            curr = pq.pollFirst(); // poll the node with minimum d(node)
 
             if (!this.graph.hasAdj(curr.getKey()))// checking if curr have any edges coming out of him
                 continue;
@@ -174,9 +175,9 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
     public List<NodeData> shortestPath(int src, int dest) {
         HashMap<Integer, Node> dad = new HashMap<>();// = hashmap <node.key,dadNode>
         Iterator Iter = this.graph.nodeIter();
-        PriorityQueue<Node> pq = new PriorityQueue(new NodeComparator());//priority queue sorting by the d(node)
+        LinkedList<Node> pq = new LinkedList();//priority queue sorting by the d(node)
         Node curr;
-        while (Iter.hasNext()) {// initial all the d(node) to infinite and d(srcNode) = 0
+        while (Iter.hasNext()) {// initial all the d(node) to infinity and d(srcNode) = 0
             curr = (Node) Iter.next();
             if (curr.getKey() == src)
                 curr.setWeight(0);
@@ -184,15 +185,12 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
                 curr.setWeight(Double.MAX_VALUE);
             pq.add(curr); // adding the node to the priority queue
         }
-
         Node adjNode;
         Edge connEdge;
         Node temp;
         while (!pq.isEmpty()){
-            temp = pq.poll();
-            pq.add(temp);
-            curr = pq.poll(); // poll the node with minimum d(node)
-
+            pq.sort(new NodeComparator());
+            curr = pq.pollFirst(); // poll the node with minimum d(node)
             if (!this.graph.hasAdj(curr.getKey()))// checking if curr have any edges coming out of him
                 continue;
 
@@ -200,12 +198,13 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
             while (Iter.hasNext()){ // for each edge leaving curr
                 connEdge = (Edge) Iter.next();
                 adjNode = (Node) this.graph.getNode(connEdge.getDest());
-                if (adjNode.getWeight() >= curr.getWeight() + connEdge.getWeight()) {
+                if (adjNode.getWeight() > curr.getWeight() + connEdge.getWeight()) {
                     adjNode.setWeight(curr.getWeight() + connEdge.getWeight());
                     dad.put(adjNode.getKey(), curr);
                 }
             }
         }
+
         this.graph.resetNodeW(); // reset the nodes weight to -1
         List returnList= new Vector<Node> ();// list to collect the path
         curr = (Node) this.graph.getNode(dest);
