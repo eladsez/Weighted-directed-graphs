@@ -1,11 +1,17 @@
 package gui;
 
+import api.EdgeData;
+import api.NodeData;
 import logicControl.DWGraph;
 import logicControl.Edge;
 import logicControl.Node;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.QuadCurve2D;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
 
 public class DrawGraphPanel extends JPanel {
 
@@ -14,10 +20,12 @@ public class DrawGraphPanel extends JPanel {
     private int[] nodeXpos;
     private int[] nodeYpos;
     private Graphics panelG;
+    private List colored;
 
-    public DrawGraphPanel(DWGraph g) {
+    public DrawGraphPanel(DWGraph g, List colored) {
         this.setLayout(null);
         this.graph = g;
+        this.colored = colored;
         this.nodeXpos = new int[g.nodeSize()];
         this.nodeYpos = new int[g.nodeSize()];
         this.screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -31,6 +39,14 @@ public class DrawGraphPanel extends JPanel {
         drawEdges(g);
         drawNodes(g);
 
+    }
+
+    public DWGraph getGraph() {
+        return this.graph;
+    }
+
+    public void setGraph(DWGraph graph) {
+        this.graph = graph;
     }
 
     private void updateArr() {
@@ -61,15 +77,6 @@ public class DrawGraphPanel extends JPanel {
             this.nodeYpos[curr.getKey()] = (int) y;
 
         }
-
-//        int x,y;
-//        while (iter.hasNext()) {
-//            curr = (Node) iter.next();
-//            x = (int) ((curr.getPos().x() * 100000) % 1000);
-//            y = (int) ((curr.getPos().y() * 100000) % 1000);
-//            this.nodeXpos[curr.getKey()] = x;
-//            this.nodeYpos[curr.getKey()] = y;
-//        }
     }
 
     private void drawNodes(Graphics g){
@@ -89,6 +96,20 @@ public class DrawGraphPanel extends JPanel {
     }
 
     private void drawEdges(Graphics g){
+        List<EdgeData> coloredEdges = new Vector<>();
+        if (this.colored != null) {
+            Iterator listIter = this.colored.iterator();
+            Node currNode, nextNode = null;
+            if (listIter.hasNext()) {
+                currNode = (Node) listIter.next();
+                while (listIter.hasNext()) {
+                    nextNode = (Node) listIter.next();
+                    coloredEdges.add(this.graph.getEdge(currNode.getKey(), nextNode.getKey()));
+                    if (listIter.hasNext())
+                        currNode = nextNode;
+                }
+            }
+        }
         Graphics2D g2 = (Graphics2D) g;
         Iterator iter = this.graph.edgeIter();
         Edge curr;
@@ -96,16 +117,22 @@ public class DrawGraphPanel extends JPanel {
         float xAvg, yAvg;
         while (iter.hasNext()){
             curr = (Edge) iter.next();
-            drawArrowLine(g2,this.nodeXpos[curr.getSrc()] + 12, this.nodeYpos[curr.getSrc()] + 12, this.nodeXpos[curr.getDest()]  + 10
-            , this.nodeYpos[curr.getDest()]  + 10, 30, 7);
-            xAvg = (this.nodeXpos[curr.getSrc()] + this.nodeXpos[curr.getDest()]) / 2;
-            yAvg = (this.nodeYpos[curr.getSrc()] + this.nodeYpos[curr.getDest()]) / 2;
-            g2.setColor(Color.WHITE);
-            g2.drawString(Double.toString(curr.getWeight()), xAvg, yAvg);
+            if (!coloredEdges.contains(curr)) {
+                drawArrowLine(g2, this.nodeXpos[curr.getSrc()] + 12, this.nodeYpos[curr.getSrc()] + 12, this.nodeXpos[curr.getDest()] + 10
+                        , this.nodeYpos[curr.getDest()] + 10, 30, 7, true, Color.BLACK);
+//            xAvg = (this.nodeXpos[curr.getSrc()] + this.nodeXpos[curr.getDest()]) / 2;
+//            yAvg = (this.nodeYpos[curr.getSrc()] + this.nodeYpos[curr.getDest()]) / 2;
+//            g2.setColor(Color.WHITE);
+//            g2.drawString(Double.toString(curr.getWeight()), xAvg, yAvg);
+            }
+            else {
+                drawArrowLine(g2, this.nodeXpos[curr.getSrc()] + 12, this.nodeYpos[curr.getSrc()] + 12, this.nodeXpos[curr.getDest()] + 10
+                        , this.nodeYpos[curr.getDest()] + 10, 30, 7, true, Color.MAGENTA);
+            }
         }
     }
 
-    private void drawArrowLine(Graphics2D g2, int x1, int y1, int x2, int y2, int d, int h) {
+    private void drawArrowLine(Graphics2D g2, int x1, int y1, int x2, int y2, int d, int h,boolean curvFlag, Color color) {
         int dx = x2 - x1, dy = y2 - y1;
         double D = Math.sqrt(dx*dx + dy*dy);
         double xm = D - d, xn = xm, ym = h, yn = -h, x;
@@ -122,8 +149,37 @@ public class DrawGraphPanel extends JPanel {
         int[] xpoints = {x2 + 2, (int) xm, (int) xn};
         int[] ypoints = {y2 + 2, (int) ym, (int) yn};
         g2.setStroke(new BasicStroke(2));
-        g2.setColor(Color.BLACK);
+        g2.setColor(color);
+
+//        if(curvFlag){
+//
+//            // create new QuadCurve2D.Float
+//            QuadCurve2D q = new QuadCurve2D.Double();
+//            // draw QuadCurve2D.Float with set coordinates
+//            double controlX, controlY;
+//            LineFunction line = new LineFunction(-1/((y1-y2)/(x1-x2)));
+//            line.findD((x1 + x2)/2, (y1 + y2)/2);
+//            controlX = 10;
+//            controlY = line.f(10);
+//            q.setCurve(x1, y1, controlX, controlY, x2, y2);
+//            g2.draw(q);
+//            g2.fillPolygon(xpoints, ypoints, 3);
+//            return;
+//        }
+
         g2.drawLine(x1, y1, x2, y2);
         g2.fillPolygon(xpoints, ypoints, 3);
+    }
+    class LineFunction{
+        int m, d;
+        public LineFunction(int m) {
+            this.m = m;
+        }
+        public void findD(int x, int y){
+            this.d = y - this.m * x;
+        }
+        public int f(int x){
+            return m*x + d;
+        }
     }
 }

@@ -1,9 +1,7 @@
 package logicControl;
 
-import api.DirectedWeightedGraph;
-import api.EdgeData;
+import api.*;
 import api.GeoLocation;
-import api.NodeData;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -12,6 +10,7 @@ import org.json.simple.parser.ParseException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * This is a java class containing methods of a DirectedWeightedGraph.
@@ -112,6 +111,19 @@ public class DWGraph implements DirectedWeightedGraph {
                     throw new RuntimeException("The graph has changed since the iterator was constructed!");
                 return (NodeData) iter.next();
             }
+            @Override
+            public void remove() {
+                if (this.MCheck != MC)
+                    throw new RuntimeException("The graph has changed since the iterator was constructed!");
+                iter.remove();
+            }
+
+            @Override
+            public void forEachRemaining(Consumer<? super NodeData> action) {
+                if (this.MCheck != MC)
+                    throw new RuntimeException("The graph has changed since the iterator was constructed!");
+                iter.forEachRemaining(action);
+            }
         };
     }
 
@@ -140,6 +152,19 @@ public class DWGraph implements DirectedWeightedGraph {
                 if (this.MCheck != MC)
                     throw new RuntimeException("The graph has changed since the iterator was constructed!");
                 return (EdgeData) iter.next();
+            }
+            @Override
+            public void remove() {
+                if (this.MCheck != MC)
+                    throw new RuntimeException("The graph has changed since the iterator was constructed!");
+                iter.remove();
+            }
+
+            @Override
+            public void forEachRemaining(Consumer<? super EdgeData> action) {
+                if (this.MCheck != MC)
+                    throw new RuntimeException("The graph has changed since the iterator was constructed!");
+                iter.forEachRemaining(action);
             }
         };
     }
@@ -171,6 +196,19 @@ public class DWGraph implements DirectedWeightedGraph {
                 return (EdgeData) iter.next();
             }
 
+            @Override
+            public void remove() {
+                if (this.MCheck != MC)
+                    throw new RuntimeException("The graph has changed since the iterator was constructed!");
+                iter.remove();
+            }
+
+            @Override
+            public void forEachRemaining(Consumer<? super EdgeData> action) {
+                if (this.MCheck != MC)
+                    throw new RuntimeException("The graph has changed since the iterator was constructed!");
+                iter.forEachRemaining(action);
+            }
         };
     }
 
@@ -257,16 +295,31 @@ public class DWGraph implements DirectedWeightedGraph {
         return list;
     }
 
-    public void resetRevealTime() {
+    public void resetNodeW(){
         Nodes.forEach((id, node) -> {
-            ((Node) node).setRevealTime(-1);
+            node.setWeight(0);
         });
     }
 
-    public void resetNodeW(){
+    public void resetTag(){
         Nodes.forEach((id, node) -> {
-            node.setWeight(-1);
+            node.setTag(0);
         });
+    }
+
+    public static DirectedWeightedGraph transpose(DirectedWeightedGraph graph){
+       DirectedWeightedGraph returnG = new DWGraph();
+       Iterator iter = graph.nodeIter();
+       while (iter.hasNext())
+           returnG.addNode(new Node((Node) iter.next()));
+
+       iter = graph.edgeIter();
+       Edge currEdge;
+       while (iter.hasNext()){
+           currEdge = (Edge) iter.next();
+           returnG.connect(currEdge.getDest(), currEdge.getSrc(), currEdge.getWeight());
+       }
+        return returnG;
     }
 
     /**

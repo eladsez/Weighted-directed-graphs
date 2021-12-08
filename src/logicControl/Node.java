@@ -18,16 +18,14 @@ public class Node implements api.NodeData {
     private api.GeoLocation pos;
     private double weight;
     private int tag;
-    private int lowLink;
-    private int revealTime;//for dfs algorithm
-    private boolean onStack;
 
     //constructors
     public Node(int id, api.GeoLocation pos) {
         this.id = id;
         this.pos = pos;
-        this.revealTime = -1; //initialized to -1
     }
+
+    //deep copy constructor
     public Node(Node n){
         this.id = n.id;
         this.pos = n.pos;
@@ -78,30 +76,6 @@ public class Node implements api.NodeData {
     @Override
     public void setTag(int t) {
         this.tag = t;
-    }
-
-    public void setLowLink(int lowLink) {
-        this.lowLink = lowLink;
-    }
-
-    public void setRevealTime(int index) {
-        this.revealTime = index;
-    }
-
-    public int getLowLink() {
-        return lowLink;
-    }
-
-    public int getRevealTime() {
-        return revealTime;
-    }
-
-    public void setOnStack(boolean onStack) {
-        this.onStack = onStack;
-    }
-
-    public boolean isOnStack() {
-        return onStack;
     }
 
     @Override

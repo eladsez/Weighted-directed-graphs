@@ -3,7 +3,6 @@ package logicControl;
 import api.DirectedWeightedGraph;
 import api.NodeData;
 import org.json.simple.parser.ParseException;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -68,9 +67,9 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
             currEdge = (Edge) iter.next();
             returnGraph.connect(currEdge.getSrc(), currEdge.getDest(), currEdge.getWeight());
         }
-
         return returnGraph;
     }
+
 
     /**
      * Returns true if and only if (iff) there is a valid path from each node to each
@@ -79,61 +78,43 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
      * @return
      */
     @Override
-    public boolean isConnected() {
-        return (1 == tarjan().size());
+    public boolean isConnected(){
+        DWGraph trans = (DWGraph) DWGraph.transpose(this.graph);
+        // TODO check if there is another src to give to the bfs
+        boolean ans = bfs(this.graph, 0) == this.graph.nodeSize() && this.graph.nodeSize() == bfs(trans, 0);
+        this.graph.resetTag();
+        return ans;
     }
 
-    /**
-     * the algorithm we used in the isConncted function
-     * this is the driving function, and the heavy lifting is done with the strong Connect function
-     */
-    private HashMap tarjan() {
-        HashMap<Integer, HashMap<Integer, Node>> components = new HashMap<>();
-        this.time = 0;
-        ((DWGraph) this.graph).resetRevealTime();
-        Stack<Node> stack = new Stack<>();
-        Iterator nodeIter = this.graph.nodeIter();
-        Node currNode;
-        while (nodeIter.hasNext()) {
-            currNode = (Node) nodeIter.next();
-            if (currNode.getRevealTime() == -1)// currNode hasn't been visited
-                strongConnect(currNode, stack, components);
+    /// 0 - unvisited ,  1 - in progress,  2 - visited
+    private static int bfs(DWGraph graph, int src) {
+        int nodeCounter = 1; // set to 1 not to 0 because we already count the src
+        Queue<Node> qu = new LinkedList<>();
+        Iterator iter = graph.nodeIter();
+        while (iter.hasNext()){
+            ((Node)iter.next()).setTag(0);
         }
-        return components;
-    }
-
-    /**
-     * this is the heavy function of the isConnect function
-     */
-    private void strongConnect(Node node, Stack<Node> stack, HashMap components) {
-        node.setRevealTime(this.time);
-        node.setLowLink(this.time);
-        this.time++;
-        stack.push(node);
-        node.setOnStack(true);
-        Iterator adjIter = graph.edgeIter(node.getKey());
-        Node adjNode = null;
-        while (adjIter.hasNext()) {
-            adjNode = (Node) graph.getNode(((Edge) adjIter.next()).getDest());
-            if (!((DWGraph) this.graph).hasAdj(adjNode.getKey()))
+        graph.getNode(src).setTag(1);
+        qu.add((Node) graph.getNode(src));
+        Node currNode, adjNode;
+        while (!qu.isEmpty()){
+            currNode = qu.poll();
+            if (!graph.hasAdj(currNode.getKey())){
+                currNode.setTag(2);
                 continue;
-            if (adjNode.getRevealTime() == -1) {
-                strongConnect(adjNode, stack, components);
-                node.setLowLink(Math.min(node.getLowLink(), adjNode.getLowLink()));
-            } else if (adjNode.isOnStack())
-                node.setLowLink(Math.min(node.getLowLink(), adjNode.getRevealTime()));
-        }
-
-        if (node.getLowLink() == node.getRevealTime()) {
-            HashMap<Integer, Node> component = new HashMap<>();
-            while (adjNode != node) {
-                adjNode = stack.pop();
-                adjNode.setOnStack(false);
-                component.put(adjNode.getKey(), adjNode);
             }
-            component.put(node.getKey(), node);
-            components.put(node.getKey(), component);
+            iter = graph.edgeIter(currNode.getKey());
+            while (iter.hasNext()){
+                adjNode = (Node) graph.getNode(((Edge)iter.next()).getDest());
+                if(adjNode.getTag() == 0) {
+                    nodeCounter++;
+                    adjNode.setTag(1);
+                    qu.add(adjNode);
+                }
+            }
+            currNode.setTag(2);
         }
+        return nodeCounter;
     }
 
     /**
@@ -203,9 +184,13 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
                 curr.setWeight(Double.MAX_VALUE);
             pq.add(curr); // adding the node to the priority queue
         }
+
         Node adjNode;
         Edge connEdge;
+        Node temp;
         while (!pq.isEmpty()){
+            temp = pq.poll();
+            pq.add(temp);
             curr = pq.poll(); // poll the node with minimum d(node)
 
             if (!this.graph.hasAdj(curr.getKey()))// checking if curr have any edges coming out of him
@@ -215,7 +200,7 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
             while (Iter.hasNext()){ // for each edge leaving curr
                 connEdge = (Edge) Iter.next();
                 adjNode = (Node) this.graph.getNode(connEdge.getDest());
-                if (adjNode.getWeight() > curr.getWeight() + connEdge.getWeight()) {
+                if (adjNode.getWeight() >= curr.getWeight() + connEdge.getWeight()) {
                     adjNode.setWeight(curr.getWeight() + connEdge.getWeight());
                     dad.put(adjNode.getKey(), curr);
                 }
@@ -242,7 +227,8 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
      */
     @Override
     public NodeData center() {
-        //TODO add if (graph is connected)
+        if (!this.isConnected())
+            return null;
         Node center = null;
         double minDist = Double.MAX_VALUE;
         double currDist;
