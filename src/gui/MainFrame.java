@@ -248,7 +248,7 @@ public class MainFrame extends JFrame implements ActionListener {
             try {
                 String[] node = JOptionPane.showInputDialog(null, "Enter a new node: \"key,x,y\""
                         , "Add node", JOptionPane.PLAIN_MESSAGE).split(",");
-                GeoLocation geo = new logicControl.GeoLocation(Double.parseDouble(node[1]), Double.parseDouble(node[1]), 0);
+                GeoLocation geo = new logicControl.GeoLocation(Double.parseDouble(node[1]), Double.parseDouble(node[2]), 0);
                 Node newNode = new Node(Integer.parseInt(node[0]), geo);
                 this.gAlgo.getGraph().addNode(newNode);
                 this.remove(panel);
