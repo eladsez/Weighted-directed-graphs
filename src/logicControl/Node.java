@@ -19,6 +19,7 @@ public class Node implements api.NodeData {
     private double weight;
     private int tag;
 
+
     //constructors
     public Node(int id, api.GeoLocation pos) {
         this.id = id;
