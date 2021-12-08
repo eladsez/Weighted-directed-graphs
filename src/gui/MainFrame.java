@@ -1,5 +1,6 @@
 package gui;
 
+import api.GeoLocation;
 import api.NodeData;
 import logicControl.DWGraph;
 import logicControl.DWGraphAlgo;
@@ -244,7 +245,75 @@ public class MainFrame extends JFrame implements ActionListener {
         }
 
         if (e.getSource() == addNodeItem){
+            try {
+                String[] node = JOptionPane.showInputDialog(null, "Enter a new node: \"key,x,y\""
+                        , "Add node", JOptionPane.PLAIN_MESSAGE).split(",");
+                GeoLocation geo = new logicControl.GeoLocation(Double.parseDouble(node[1]), Double.parseDouble(node[1]), 0);
+                Node newNode = new Node(Integer.parseInt(node[0]), geo);
+                this.gAlgo.getGraph().addNode(newNode);
+                this.remove(panel);
+                this.panel = new DrawGraphPanel((DWGraph) gAlgo.getGraph(), null, null, null);
+                this.add(panel);
+                this.repaint();
+                this.revalidate();
+            }
+            catch (Exception E){
+                JOptionPane.showMessageDialog(null, "Invalid Node", "ERROR"
+                        , JOptionPane.ERROR_MESSAGE);
+            }
+        }
 
+        if (e.getSource() == removeNodeItem){
+            try{
+                String nodeKey = JOptionPane.showInputDialog(null, "Enter node KEY to remove"
+                        , "Remove node", JOptionPane.INFORMATION_MESSAGE);
+                this.gAlgo.getGraph().removeNode(Integer.parseInt(nodeKey));
+                this.remove(panel);
+                this.panel = new DrawGraphPanel((DWGraph) gAlgo.getGraph(), null, null, null);
+                this.add(panel);
+                this.repaint();
+                this.revalidate();
+            }
+            catch (Exception E){
+                JOptionPane.showMessageDialog(null, "Invalid Node key", "ERROR"
+                        , JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        if (e.getSource() == addEdgeItem){
+            try {
+                String[] src_dest_w = JOptionPane.showInputDialog(null, "Enter \"src,dest,weight\" to connect"
+                        , "Add edge", JOptionPane.PLAIN_MESSAGE).split(",");
+                this.gAlgo.getGraph().connect(Integer.parseInt(src_dest_w[0]), Integer.parseInt(src_dest_w[1])
+                        ,Double.parseDouble(src_dest_w[2]));
+                this.remove(panel);
+                this.panel = new DrawGraphPanel((DWGraph) gAlgo.getGraph(), null, null, null);
+                this.add(panel);
+                this.repaint();
+                this.revalidate();
+            }
+            catch (Exception E){
+                JOptionPane.showMessageDialog(null, "Invalid \"src,dest,weight\"", "ERROR"
+                        , JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        if (e.getSource() == removeEdgeItem){
+            try {
+                String[] src_dest = JOptionPane.showInputDialog(null, "Enter \"src,dest\" to to remove the edge" +
+                                "between them"
+                        , "Remove edge", JOptionPane.PLAIN_MESSAGE).split(",");
+                this.gAlgo.getGraph().removeEdge(Integer.parseInt(src_dest[0]), Integer.parseInt(src_dest[1]));
+                this.remove(panel);
+                this.panel = new DrawGraphPanel((DWGraph) gAlgo.getGraph(), null, null, null);
+                this.add(panel);
+                this.repaint();
+                this.revalidate();
+            }
+            catch (Exception E){
+                JOptionPane.showMessageDialog(null, "Invalid \"src,dest\"", "ERROR"
+                        , JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
