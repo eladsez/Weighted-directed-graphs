@@ -6,6 +6,7 @@ import logicControl.Edge;
 import logicControl.Node;
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -22,8 +23,8 @@ public class DrawGraphPanel extends JPanel {
 
     private Dimension screenSize;
     private DWGraph graph;
-    private int[] nodeXpos;
-    private int[] nodeYpos;
+    private HashMap<Integer, Integer> nodeXpos;
+    private HashMap<Integer, Integer> nodeYpos;
     private Graphics panelG;
     private List colored;
     private Node center;
@@ -35,8 +36,8 @@ public class DrawGraphPanel extends JPanel {
         this.calldFrom = call;
         this.colored = colored;
         this.center = center;
-        this.nodeXpos = new int[g.nodeSize()];
-        this.nodeYpos = new int[g.nodeSize()];
+        this.nodeXpos = new HashMap<>(this.graph.nodeSize());
+        this.nodeYpos = new HashMap<>(this.graph.nodeSize());
         this.screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         this.setPreferredSize(screenSize);
     }
@@ -82,8 +83,8 @@ public class DrawGraphPanel extends JPanel {
             x = (curr.getPos().x() - minX) * uintX;
             y = (curr.getPos().y() - minY) * unitY;
 
-            this.nodeXpos[curr.getKey()] = (int) x;
-            this.nodeYpos[curr.getKey()] = (int) y;
+            this.nodeXpos.put(curr.getKey(), (int) x);
+            this.nodeYpos.put(curr.getKey(), (int) y);
 
         }
     }
@@ -98,14 +99,14 @@ public class DrawGraphPanel extends JPanel {
             if (curr == center){
                 g2.setStroke(new BasicStroke(7));
                 g2.setColor(Color.WHITE);
-                g2.drawOval(this.nodeXpos[curr.getKey()]-2,this.nodeYpos[curr.getKey()]-2,26,26);
+                g2.drawOval(this.nodeXpos.get(curr.getKey())-2,this.nodeYpos.get(curr.getKey())-2,26,26);
             }
             g2.setColor(Color.RED);
-            g2.fillOval(this.nodeXpos[curr.getKey()],this.nodeYpos[curr.getKey()],22,22);
+            g2.fillOval(this.nodeXpos.get(curr.getKey()),this.nodeYpos.get(curr.getKey()),22,22);
             g2.setColor(Color.BLACK);
             g2.setStroke(new BasicStroke(2));
             g2.setFont(new Font("Serif", Font.CENTER_BASELINE, 12));
-            g2.drawString(Integer.toString(curr.getKey()), this.nodeXpos[curr.getKey()] + 6, this.nodeYpos[curr.getKey()] + 17);
+            g2.drawString(Integer.toString(curr.getKey()), this.nodeXpos.get(curr.getKey()) + 6, this.nodeYpos.get(curr.getKey()) + 17);
         }
     }
 
@@ -132,13 +133,13 @@ public class DrawGraphPanel extends JPanel {
         while (iter.hasNext()){
             curr = (Edge) iter.next();
             if (!coloredEdges.contains(curr)) {
-                drawArrowLine(g2, this.nodeXpos[curr.getSrc()] + 12, this.nodeYpos[curr.getSrc()] + 12, this.nodeXpos[curr.getDest()] + 10
-                        , this.nodeYpos[curr.getDest()] + 10, 30, 7, true, Color.BLACK);
+                drawArrowLine(g2, this.nodeXpos.get(curr.getSrc()) + 12, this.nodeYpos.get(curr.getSrc()) + 12, this.nodeXpos.get(curr.getDest()) + 10
+                        , this.nodeYpos.get(curr.getDest()) + 10, 30, 7, true, Color.BLACK);
             }
         }
         coloredEdges.forEach(edgeData -> {
-            drawArrowLine(g2, this.nodeXpos[edgeData.getSrc()] + 12, this.nodeYpos[edgeData.getSrc()] + 12, this.nodeXpos[edgeData.getDest()] + 10
-                    , this.nodeYpos[edgeData.getDest()] + 10, 30, 7, true, Color.MAGENTA);
+            drawArrowLine(g2, this.nodeXpos.get(edgeData.getSrc()) + 12, this.nodeYpos.get(edgeData.getSrc()) + 12, this.nodeXpos.get(edgeData.getDest()) + 10
+                    , this.nodeYpos.get(edgeData.getDest()) + 10, 30, 7, true, Color.MAGENTA);
         });
     }
 
