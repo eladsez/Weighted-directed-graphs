@@ -31,14 +31,14 @@ We've implemented the algorithm in the following way:
   3. the results are then inserted into a list and returned.  
 
 * `center` - return the node that is the closest to every other node.   
-Approach: we are searching for the node with the shortest path, but from the longest result this node got from `shortestPathDist`.
+**Approach:** we are searching for the node with the shortest path, but from the longest result this node got from `shortestPathDist`.
 We've implemented the algorithm in the following way:    
   1. loop through all of the nodes in the graph.
   2. for each node check with `shortestPathDist` what is the **longest** path
   3. return the node with the shortest one.  
 
 * `tsp` - return the shrotest path between a list of nodes.   
-Approach: we are usuing greedy algorithm, in order to get an acceptble path at reasonble time.
+**Approach:** we are usuing greedy algorithm, in order to get an acceptble path at reasonble time.
 We've implemented the algorithm in the following way:    
   1. 
 
