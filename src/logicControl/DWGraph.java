@@ -54,6 +54,10 @@ public class DWGraph implements DirectedWeightedGraph {
 
     }
 
+    public boolean containNode(int key){
+        return this.Nodes.containsKey(key);
+    }
+
     @Override
     public void addNode(NodeData n) {
         this.Nodes.put(n.getKey(), n);

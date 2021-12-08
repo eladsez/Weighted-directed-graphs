@@ -18,6 +18,7 @@ public class Node implements api.NodeData {
     private api.GeoLocation pos;
     private double weight;
     private int tag;
+    private String info;
 
 
     //constructors
@@ -61,12 +62,12 @@ public class Node implements api.NodeData {
 
     @Override
     public String getInfo() {
-        return null; ////// TODO
+        return this.info;
     }
 
     @Override
     public void setInfo(String s) {
-        ////// TODO
+        this.info = s;
     }
 
     @Override

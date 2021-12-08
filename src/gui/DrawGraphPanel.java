@@ -1,31 +1,40 @@
 package gui;
 
 import api.EdgeData;
-import api.NodeData;
 import logicControl.DWGraph;
 import logicControl.Edge;
 import logicControl.Node;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.QuadCurve2D;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+enum CalledFrom{
+    center,
+    shortestPath,
+    shortestPathDist,
+    tsp,
+    isConnected
+}
+
 public class DrawGraphPanel extends JPanel {
 
-    static Dimension screenSize;
+    private Dimension screenSize;
     private DWGraph graph;
     private int[] nodeXpos;
     private int[] nodeYpos;
     private Graphics panelG;
     private List colored;
+    private Node center;
+    private CalledFrom calldFrom;
 
-    public DrawGraphPanel(DWGraph g, List colored) {
+    public DrawGraphPanel(DWGraph g, List colored, Node center, CalledFrom call) {
         this.setLayout(null);
         this.graph = g;
+        this.calldFrom = call;
         this.colored = colored;
+        this.center = center;
         this.nodeXpos = new int[g.nodeSize()];
         this.nodeYpos = new int[g.nodeSize()];
         this.screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -86,6 +95,11 @@ public class DrawGraphPanel extends JPanel {
 
         while (iter.hasNext()){
             curr = (Node) iter.next();
+            if (curr == center){
+                g2.setStroke(new BasicStroke(7));
+                g2.setColor(Color.WHITE);
+                g2.drawOval(this.nodeXpos[curr.getKey()]-2,this.nodeYpos[curr.getKey()]-2,26,26);
+            }
             g2.setColor(Color.RED);
             g2.fillOval(this.nodeXpos[curr.getKey()],this.nodeYpos[curr.getKey()],22,22);
             g2.setColor(Color.BLACK);
@@ -120,16 +134,12 @@ public class DrawGraphPanel extends JPanel {
             if (!coloredEdges.contains(curr)) {
                 drawArrowLine(g2, this.nodeXpos[curr.getSrc()] + 12, this.nodeYpos[curr.getSrc()] + 12, this.nodeXpos[curr.getDest()] + 10
                         , this.nodeYpos[curr.getDest()] + 10, 30, 7, true, Color.BLACK);
-//            xAvg = (this.nodeXpos[curr.getSrc()] + this.nodeXpos[curr.getDest()]) / 2;
-//            yAvg = (this.nodeYpos[curr.getSrc()] + this.nodeYpos[curr.getDest()]) / 2;
-//            g2.setColor(Color.WHITE);
-//            g2.drawString(Double.toString(curr.getWeight()), xAvg, yAvg);
-            }
-            else {
-                drawArrowLine(g2, this.nodeXpos[curr.getSrc()] + 12, this.nodeYpos[curr.getSrc()] + 12, this.nodeXpos[curr.getDest()] + 10
-                        , this.nodeYpos[curr.getDest()] + 10, 30, 7, true, Color.MAGENTA);
             }
         }
+        coloredEdges.forEach(edgeData -> {
+            drawArrowLine(g2, this.nodeXpos[edgeData.getSrc()] + 12, this.nodeYpos[edgeData.getSrc()] + 12, this.nodeXpos[edgeData.getDest()] + 10
+                    , this.nodeYpos[edgeData.getDest()] + 10, 30, 7, true, Color.MAGENTA);
+        });
     }
 
     private void drawArrowLine(Graphics2D g2, int x1, int y1, int x2, int y2, int d, int h,boolean curvFlag, Color color) {
