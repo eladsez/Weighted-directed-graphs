@@ -262,9 +262,67 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
      */
     @Override
     public List<NodeData> tsp(List<NodeData> cities) {
-        return null;
+        if (!isConnected() || cities.size() == 0)
+            return null;
+        List ans = new Vector<Node>(); //list of nodes in the correct order
+        List temp = new Vector<Node>(); //list of nodes - the shortest path between two nodes
+        Node src = (Node) cities.remove(0); //the first node is the src
+        ans.add(src);
+        double dist = Double.MAX_VALUE;
+        double tempDist;
+        for (NodeData node1 : cities) {
+            for (NodeData node2 : cities) {
+                tempDist = this.shortestPathDist(node1.getKey(), node2.getKey());
+                if (dist > tempDist)
+                    dist = tempDist;
+                temp.addAll(this.shortestPath(node1.getKey(), node2.getKey()));
+
+
+            }
+
+        }
+
+        return ans;
     }
 
+
+    public List<NodeData> tsptry(List<NodeData> cities) {
+        if (!isConnected() || cities.size() == 0)
+            return null;
+        List<NodeData> ans = new LinkedList<>();
+        List<NodeData> temp = new ArrayList<>(cities);
+        NodeData p = temp.remove(0);
+        ans.add(p);
+        while (temp.size() >= 1) {
+            int id = p.getKey();
+            this.dijkstra(id);
+            HashMap<Integer, Double> dist = new HashMap<>();
+            dist.put(id, this.graph.getNode(id).getWeight());
+            NodeData tempNode = null;
+            double min = Integer.MAX_VALUE;
+            for (NodeData n : temp) {
+                if (dist.get(n.getKey()) < min) {
+                    min = dist.get(n.getKey());
+                    tempNode = n;
+                }
+            }
+            List<NodeData> path = new LinkedList<>();
+            HashMap<Integer, NodeData> prev = new HashMap<>();
+            prev.put(id, this.graph.getNode(this.graph.getNode(id).getTag()));
+            NodeData c = tempNode;
+            if (prev.get(tempNode.getKey()) != null || tempNode.getKey() == id)
+                while (prev.get(tempNode.getKey()) != null) {
+                    path.add(0, tempNode);
+                    tempNode = prev.get(tempNode.getKey());
+                }
+            p = c;
+            temp.remove(c);
+            ans.addAll(path);
+        }
+        this.graph.resetNodeW(); // reset the nodes weight to 0
+        this.graph.resetTag();
+        return ans;
+    }
 
     /**
      * Saves this weighted (directed) graph to the given
