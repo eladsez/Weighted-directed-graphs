@@ -1,4 +1,5 @@
 @startuml
+!theme reddress-darkblue
 class logicControl.Edge {
 - int src
 - int dest
