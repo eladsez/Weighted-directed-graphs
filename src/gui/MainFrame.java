@@ -1,5 +1,6 @@
 package gui;
 
+import api.DirectedWeightedGraphAlgorithms;
 import api.GeoLocation;
 import api.NodeData;
 import logicControl.DWGraph;
@@ -21,10 +22,11 @@ public class MainFrame extends JFrame implements ActionListener {
             .getLocalGraphicsEnvironment().getScreenDevices()[0];
     DWGraphAlgo gAlgo;
     private DrawGraphPanel panel;
-    final private JButton fullScreen;
-    final private JButton exitFS;
-    final private JPanel fsPanel;
-    final private JPanel exitFSPanel;
+    ///// ********* if you want a full screen button ********
+//    final private JButton fullScreen;
+//    final private JButton exitFS;
+//    final private JPanel fsPanel;
+//    final private JPanel exitFSPanel;
     final private JMenuBar menuBar;
     final private JMenu fileMenu;
     final private JMenu algoMenu;
@@ -43,13 +45,14 @@ public class MainFrame extends JFrame implements ActionListener {
     final private JMenuItem removeEdgeItem;
 
 
-    public MainFrame(DWGraphAlgo gAlgo) throws HeadlessException {
-        this.gAlgo = gAlgo;
+    public MainFrame(DirectedWeightedGraphAlgorithms gAlgo) throws HeadlessException {
+        this.gAlgo = (DWGraphAlgo) gAlgo;
         this.panel = new DrawGraphPanel((DWGraph) gAlgo.getGraph(), null, null, null);
-        this.fsPanel = new JPanel(new GridLayout(1,1,0,0));
-        this.exitFSPanel = new JPanel(new GridLayout(1,1,0,0));
-        this.fullScreen = new JButton("Full screen");
-        this.exitFS = new JButton("Exit full screen");
+        ///// ********* if you want a full screen button ********
+//        this.fsPanel = new JPanel(new GridLayout(1,1,0,0));
+//        this.exitFSPanel = new JPanel(new GridLayout(1,1,0,0));
+//        this.fullScreen = new JButton("Full screen");
+//        this.exitFS = new JButton("Exit full screen");
         this.menuBar = new JMenuBar();
         this.fileMenu = new JMenu("File");
         this.algoMenu = new JMenu("Algorithms");
@@ -70,18 +73,18 @@ public class MainFrame extends JFrame implements ActionListener {
         Color color = new Color(0,160,160);
         Font font = new Font("Serif", Font.PLAIN, 20);
         UIManager.put("OptionPane.messageFont", new FontUIResource(font));
-        this.fullScreen.setBackground(color);
-        this.exitFS.setBackground(color);
-        this.fullScreen.setBorder(new LineBorder(Color.BLACK));
-        this.exitFS.setBorder(new LineBorder(Color.BLACK));
-        this.exitFSPanel.setVisible(false);
-        this.exitFS.setSize( 220,30);
-        this.fileMenu.setSize(220,30);
-        this.fsPanel.setBounds(1380,2,150,30);
-        this.exitFSPanel.setBounds(1380,2,150,30);
+        ///// ********* if you want a full screen button ********
+//        this.fullScreen.setBackground(color);
+//        this.exitFS.setBackground(color);
+//        this.fullScreen.setBorder(new LineBorder(Color.BLACK));
+//        this.exitFS.setBorder(new LineBorder(Color.BLACK));
+//        this.exitFSPanel.setVisible(false);
+//        this.exitFS.setSize( 220,30);
+//        this.fsPanel.setBounds(1380,2,150,30);
+//        this.exitFSPanel.setBounds(1380,2,150,30);
 
-        this.fullScreen.addActionListener(this);
-        this.exitFS.addActionListener(this);
+//        this.fullScreen.addActionListener(this);
+//        this.exitFS.addActionListener(this);
         this.loadG.addActionListener(this);
         this.exitItem.addActionListener(this);
         this.saveG.addActionListener(this);
@@ -111,10 +114,11 @@ public class MainFrame extends JFrame implements ActionListener {
         this.menuBar.add(editMenu);
         this.menuBar.add(algoMenu);
         this.setJMenuBar(menuBar);
-        this.fsPanel.add(fullScreen);
-        this.exitFSPanel.add(exitFS);
-        this.add(fsPanel);
-        this.add(exitFSPanel);
+ //// ********* if you want a full screen button ********
+//        this.fsPanel.add(fullScreen);
+//        this.exitFSPanel.add(exitFS);
+//        this.add(fsPanel);
+//        this.add(exitFSPanel);
         this.add(panel);
 
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -128,21 +132,25 @@ public class MainFrame extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == fullScreen) {
-            device.setFullScreenWindow(this);
-            this.fsPanel.setVisible(false);
-            this.exitFSPanel.setVisible(true);
-        }
 
-        if (e.getSource() == exitFS) {
-            device.setFullScreenWindow(null);
-            this.fsPanel.setVisible(true);
-            this.exitFSPanel.setVisible(false);
-        }
+///// ********* if you want a full screen button ********
+//        if (e.getSource() == fullScreen) {
+//            device.setFullScreenWindow(this);
+//            this.fsPanel.setVisible(false);
+//            this.exitFSPanel.setVisible(true);
+//        }
+//
+//        if (e.getSource() == exitFS) {
+//            device.setFullScreenWindow(null);
+//            this.fsPanel.setVisible(true);
+//            this.exitFSPanel.setVisible(false);
+//        }
 
         if (e.getSource() == loadG) {
             JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setCurrentDirectory(new File("./Data"));
+            try {
+                fileChooser.setCurrentDirectory(new File("./Data"));
+            }catch (Exception E){}
             int response = fileChooser.showOpenDialog(null);
             if (response == JFileChooser.APPROVE_OPTION) {
                 String graphPath = fileChooser.getSelectedFile().getAbsolutePath();
@@ -173,7 +181,9 @@ public class MainFrame extends JFrame implements ActionListener {
 
         if (e.getSource() == saveG) {
             JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setCurrentDirectory(new File("./Data"));
+            try {
+                fileChooser.setCurrentDirectory(new File("./Data"));
+            }catch (Exception E){}
             int response = fileChooser.showSaveDialog(null);
             if (response == JFileChooser.APPROVE_OPTION) {
                 String graphPath = fileChooser.getSelectedFile().getAbsolutePath();
