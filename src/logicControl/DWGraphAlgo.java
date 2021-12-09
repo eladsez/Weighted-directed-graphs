@@ -295,6 +295,8 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
      */
     @Override
     public List<NodeData> tsp(List<NodeData> cities) {
+        if (!isConnected() || cities.size() == 0)
+            return null;
         double bestDist;
         double newDist;
         List<NodeData> existingRoute = List.copyOf(cities);
