@@ -1,8 +1,6 @@
 package gui;
 
-import com.sun.tools.javac.Main;
 import logicControl.DWGraphAlgo;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

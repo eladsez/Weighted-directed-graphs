@@ -7,6 +7,7 @@ import logicControl.DWGraph;
 import logicControl.DWGraphAlgo;
 import logicControl.Node;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import javax.swing.plaf.FontUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -23,11 +24,13 @@ public class MainFrame extends JFrame implements ActionListener {
             .getLocalGraphicsEnvironment().getScreenDevices()[0];
     DWGraphAlgo gAlgo;
     private DrawGraphPanel panel;
-    ///// ********* if you want a full screen button ********
+
+    // ********* if you want a full screen button ********
 //    final private JButton fullScreen;
 //    final private JButton exitFS;
 //    final private JPanel fsPanel;
 //    final private JPanel exitFSPanel;
+
     final private JMenuBar menuBar;
     final private JMenu fileMenu;
     final private JMenu algoMenu;
@@ -49,11 +52,13 @@ public class MainFrame extends JFrame implements ActionListener {
     public MainFrame(DirectedWeightedGraphAlgorithms gAlgo) throws HeadlessException {
         this.gAlgo = (DWGraphAlgo) gAlgo;
         this.panel = new DrawGraphPanel((DWGraph) gAlgo.getGraph(), null, null);
-        ///// ********* if you want a full screen button ********
+
+        // ********* if you want a full screen button ********
 //        this.fsPanel = new JPanel(new GridLayout(1,1,0,0));
 //        this.exitFSPanel = new JPanel(new GridLayout(1,1,0,0));
 //        this.fullScreen = new JButton("Full screen");
 //        this.exitFS = new JButton("Exit full screen");
+
         this.menuBar = new JMenuBar();
         this.fileMenu = new JMenu("File");
         this.algoMenu = new JMenu("Algorithms");
@@ -74,7 +79,8 @@ public class MainFrame extends JFrame implements ActionListener {
         Color color = new Color(0,160,160);
         Font font = new Font("Serif", Font.PLAIN, 20);
         UIManager.put("OptionPane.messageFont", new FontUIResource(font));
-        ///// ********* if you want a full screen button ********
+
+        // ********* if you want a full screen button ********
 //        this.fullScreen.setBackground(color);
 //        this.exitFS.setBackground(color);
 //        this.fullScreen.setBorder(new LineBorder(Color.BLACK));
@@ -115,7 +121,8 @@ public class MainFrame extends JFrame implements ActionListener {
         this.menuBar.add(editMenu);
         this.menuBar.add(algoMenu);
         this.setJMenuBar(menuBar);
- //// ********* if you want a full screen button ********
+
+ // ********* if you want a full screen button ********
 //        this.fsPanel.add(fullScreen);
 //        this.exitFSPanel.add(exitFS);
 //        this.add(fsPanel);
@@ -134,7 +141,7 @@ public class MainFrame extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-///// ********* if you want a full screen button ********
+// ********* if you want a full screen button ********
 //        if (e.getSource() == fullScreen) {
 //            device.setFullScreenWindow(this);
 //            this.fsPanel.setVisible(false);
@@ -304,6 +311,7 @@ public class MainFrame extends JFrame implements ActionListener {
                 this.revalidate();
             }
             catch (Exception E){
+                E.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Invalid \"src,dest,weight\"", "ERROR"
                         , JOptionPane.ERROR_MESSAGE);
             }
@@ -351,12 +359,6 @@ public class MainFrame extends JFrame implements ActionListener {
                         , JOptionPane.ERROR_MESSAGE);
             }
         }
-    }
-
-    public static void main(String[] args) {
-        DWGraphAlgo algo = new DWGraphAlgo();
-        algo.load("Data/G1.json");
-        new MainFrame(algo);
     }
 }
 
