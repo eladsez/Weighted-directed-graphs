@@ -84,8 +84,8 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
     @Override
     public boolean isConnected() {
         DWGraph trans = (DWGraph) transpose(this.graph);
-        // TODO check if there is another src to give to the bfs
-        boolean ans = bfs(this.graph, 0) == this.graph.nodeSize() && this.graph.nodeSize() == bfs(trans, 0);
+        int srcKey = this.getGraph().nodeIter().next().getKey();
+        boolean ans = bfs(this.graph, srcKey) == this.graph.nodeSize() && this.graph.nodeSize() == bfs(trans, srcKey);
         this.graph.resetTag();
         return ans;
     }
