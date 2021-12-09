@@ -35,6 +35,7 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
     public DWGraphAlgo() {
         this.graph = new DWGraph();
     }
+
     public DWGraphAlgo(DirectedWeightedGraph graph) {
         this.graph = (DWGraph) graph;
     }
@@ -95,7 +96,7 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
      * @param graph (directed weighted)
      * @return the transpose graph of the given one
      */
-     private DirectedWeightedGraph transpose(DirectedWeightedGraph graph){
+    private DirectedWeightedGraph transpose(DirectedWeightedGraph graph) {
         DirectedWeightedGraph returnG = new DWGraph();
         Iterator iter = graph.nodeIter();
         while (iter.hasNext())
@@ -103,7 +104,7 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
 
         iter = graph.edgeIter();
         Edge currEdge;
-        while (iter.hasNext()){
+        while (iter.hasNext()) {
             currEdge = (Edge) iter.next();
             returnG.connect(currEdge.getDest(), currEdge.getSrc(), currEdge.getWeight());
         }
@@ -282,69 +283,99 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
      * Computes a list of consecutive nodes which go over all the nodes in cities.
      * the sum of the weights of all the consecutive (pairs) of nodes (directed) is the "cost" of the solution -
      * the lower the better.
+     * <p>
+     * Approach: we are using swaping algorithm, in order to get an acceptble path at reasonble time.
+     * 1. Start with a random route that start in the source node.
+     * 2. Perform a swap between two nodes (except the source).
+     * 3. Keep new route if it is shorter.
+     * 4. Repeat (2-3) for all possible swaps.
+     * since in this assignment we are not required to return to the source node it's simplify the solution a bit.
      */
     @Override
     public List<NodeData> tsp(List<NodeData> cities) {
-        if (!isConnected() || cities.size() == 0)
-            return null;
-        List ans = new Vector<Node>(); //list of nodes in the correct order
-        List temp = new Vector<Node>(); //list of nodes - the shortest path between two nodes
-        Node src = (Node) cities.remove(0); //the first node is the src
-        ans.add(src);
-        double dist = Double.MAX_VALUE;
-        double tempDist;
-        for (NodeData node1 : cities) {
-            for (NodeData node2 : cities) {
-                tempDist = this.shortestPathDist(node1.getKey(), node2.getKey());
-                if (dist > tempDist)
-                    dist = tempDist;
-                temp.addAll(this.shortestPath(node1.getKey(), node2.getKey()));
+        double bestDist = Double.MAX_VALUE;
+        double newDist;
+        List<NodeData> existingRoute = List.copyOf(cities);
+        existingRoute = addHelpNodes(existingRoute);
+        List<NodeData> newRoute = new LinkedList<>();
+        List<NodeData> noSrcRoute = List.copyOf(cities);
+//        noSrcRoute.remove(0);
 
-
+        for (int i = 1; i < noSrcRoute.size() - 1; i++) {
+            for (int j = i + 1; j < noSrcRoute.size(); j++) {
+                newRoute = newRoute(existingRoute, noSrcRoute.get(i).getKey(), noSrcRoute.get(j).getKey());
+                newDist = routeDist(newRoute);
+                if (newDist < bestDist) {
+                    existingRoute = newRoute;
+                    bestDist = newDist;
+                }
             }
-
         }
 
-        return ans;
+        return existingRoute;
+    }
+
+    //creating new possible route
+    private List<NodeData> newRoute(List<NodeData> existingroute, int node1, int node2) {
+        if (node2 == existingroute.get(existingroute.size()-1).getKey()) {return existingroute;}
+        List<NodeData> assembledRoute = new ArrayList<>(List.copyOf(existingroute));
+        List<NodeData> node1ToNode2 = new LinkedList<>();
+        List<NodeData> routeEnd = new LinkedList<>();
+
+        //coping and reversing the order of all the nodes from node1 to node2
+        for (int i = assembledRoute.size()-1; i > node2; i--) {
+            routeEnd.add(assembledRoute.remove(i));
+        }
+
+        //coping the end nodes
+        for (int i = node2-1; i >= node1; i--) {
+            node1ToNode2.add(assembledRoute.remove(i));
+        }
+
+        //rebuild the list
+        for (int i = 0, j = node1ToNode2.size(); i < node1ToNode2.size(); i++) {
+            assembledRoute.add(node1ToNode2.remove(i));
+        }
+
+        //rebuild the list
+        for (int i = 0; i < routeEnd.size(); i++) {
+            assembledRoute.add(routeEnd.remove(i));
+        }
+        return assembledRoute;
     }
 
 
-    public List<NodeData> tsptry(List<NodeData> cities) {
-        if (!isConnected() || cities.size() == 0)
-            return null;
-        List<NodeData> ans = new LinkedList<>();
-        List<NodeData> temp = new ArrayList<>(cities);
-        NodeData p = temp.remove(0);
-        ans.add(p);
-        while (temp.size() >= 1) {
-            int id = p.getKey();
-            this.dijkstra(id);
-            HashMap<Integer, Double> dist = new HashMap<>();
-            dist.put(id, this.graph.getNode(id).getWeight());
-            NodeData tempNode = null;
-            double min = Integer.MAX_VALUE;
-            for (NodeData n : temp) {
-                if (dist.get(n.getKey()) < min) {
-                    min = dist.get(n.getKey());
-                    tempNode = n;
-                }
+    //calculates the rout distance
+    private double routeDist(List<NodeData> route) {
+        double dist = 0;
+        double currDist;
+
+        for (int i = 0; i < route.size() - 1; i++) {
+            for (int j = i + 1; j < route.size(); j++) {
+                currDist = shortestPathDist(this.graph.getNode(i).getKey(), this.graph.getNode(j).getKey());
+                dist += currDist;
             }
-            List<NodeData> path = new LinkedList<>();
-            HashMap<Integer, NodeData> prev = new HashMap<>();
-            prev.put(id, this.graph.getNode(this.graph.getNode(id).getTag()));
-            NodeData c = tempNode;
-            if (prev.get(tempNode.getKey()) != null || tempNode.getKey() == id)
-                while (prev.get(tempNode.getKey()) != null) {
-                    path.add(0, tempNode);
-                    tempNode = prev.get(tempNode.getKey());
-                }
-            p = c;
-            temp.remove(c);
-            ans.addAll(path);
         }
-        this.graph.resetNodeW(); // reset the nodes weight to 0
-        this.graph.resetTag();
-        return ans;
+
+        return dist;
+    }
+
+    //adding nodes in the way from the graph
+    private List<NodeData> addHelpNodes(List<NodeData> existingroute) {
+        List<NodeData> assembledRoute = new LinkedList<>();
+        List<NodeData> addedNodes = new LinkedList<>();
+
+        for (int i = 0, j = i + 1; j < existingroute.size(); i++, j++) {
+            addedNodes.clear();
+            addedNodes.addAll(shortestPath(existingroute.get(i).getKey(), existingroute.get(j).getKey()));
+            if (i > 0) {
+                addedNodes.remove(0);
+                assembledRoute.addAll(addedNodes);
+            }else {
+                assembledRoute.addAll(addedNodes);
+            }
+        }
+        return assembledRoute;
     }
 
     /**
