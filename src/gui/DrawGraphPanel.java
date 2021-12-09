@@ -90,11 +90,11 @@ public class DrawGraphPanel extends JPanel {
                 g2.drawOval(this.nodeXpos.get(curr.getKey())-2,this.nodeYpos.get(curr.getKey())-2,26,26);
             }
             g2.setColor(Color.RED);
-            g2.fillOval(this.nodeXpos.get(curr.getKey()),this.nodeYpos.get(curr.getKey()),22,22);
+            g2.fillOval(this.nodeXpos.get(curr.getKey()),this.nodeYpos.get(curr.getKey()),19,19);
             g2.setColor(Color.BLACK);
             g2.setStroke(new BasicStroke(2));
             g2.setFont(new Font("Serif", Font.CENTER_BASELINE, 12));
-            g2.drawString(Integer.toString(curr.getKey()), this.nodeXpos.get(curr.getKey()) + 6, this.nodeYpos.get(curr.getKey()) + 17);
+            g2.drawString(Integer.toString(curr.getKey()), this.nodeXpos.get(curr.getKey()) + 5, this.nodeYpos.get(curr.getKey()) + 14);
         }
     }
 
@@ -121,13 +121,13 @@ public class DrawGraphPanel extends JPanel {
         while (iter.hasNext()){
             curr = (Edge) iter.next();
             if (!coloredEdges.contains(curr)) {
-                drawArrowLine(g2, this.nodeXpos.get(curr.getSrc()) + 12, this.nodeYpos.get(curr.getSrc()) + 12, this.nodeXpos.get(curr.getDest()) + 10
-                        , this.nodeYpos.get(curr.getDest()) + 10, 30, 7, true, Color.BLACK);
+                drawArrowLine(g2, this.nodeXpos.get(curr.getSrc()) + 10, this.nodeYpos.get(curr.getSrc()) + 10, this.nodeXpos.get(curr.getDest()) + 10
+                        , this.nodeYpos.get(curr.getDest()) + 10, 25, 5, true, Color.BLACK);
             }
         }
         coloredEdges.forEach(edgeData -> {
-            drawArrowLine(g2, this.nodeXpos.get(edgeData.getSrc()) + 12, this.nodeYpos.get(edgeData.getSrc()) + 12, this.nodeXpos.get(edgeData.getDest()) + 10
-                    , this.nodeYpos.get(edgeData.getDest()) + 10, 30, 7, true, Color.MAGENTA);
+            drawArrowLine(g2, this.nodeXpos.get(edgeData.getSrc()) + 10, this.nodeYpos.get(edgeData.getSrc()) + 10, this.nodeXpos.get(edgeData.getDest()) + 10
+                    , this.nodeYpos.get(edgeData.getDest()) + 10, 25, 5, true, Color.MAGENTA);
         });
     }
 
@@ -168,6 +168,9 @@ public class DrawGraphPanel extends JPanel {
 
         g2.drawLine(x1, y1, x2, y2);
         g2.fillPolygon(xpoints, ypoints, 3);
+        g2.setStroke(new BasicStroke(1));
+        g2.setColor(Color.WHITE);
+        g2.drawPolygon(xpoints, ypoints, 3);
     }
     class LineFunction{
         int m, d;

@@ -48,7 +48,7 @@ public class Ex2 {
     }
 
     public static void main(String[] args) {
-        System.out.println(getGrapg("Data/G1.json"));
-        runGUI("Data/G1.json");
+        System.out.println(getGrapgAlgo("Data/1000Nodes.json").center());
+//        runGUI("Data/G1.json");
     }
 }

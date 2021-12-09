@@ -250,7 +250,7 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
         Node temp;
         while (nodeIter.hasNext()) {
             temp = (Node) nodeIter.next();
-            currDist = farestDist(temp.getKey());
+            currDist = farestDist(temp.getKey(), minDist);
             if (minDist > currDist) {
                 minDist = currDist;
                 center = temp;
@@ -262,7 +262,7 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
     /**
      * helper function to the center function
      */
-    private double farestDist(int src) {
+    private double farestDist(int src, double currMinDist) {
         Iterator iter = this.graph.nodeIter();
         Node checkNode;
         double returnDist = Double.MIN_VALUE;
@@ -272,6 +272,8 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
             if (checkNode.getKey() == src)
                 continue;
             currDist = shortestPathDist(src, checkNode.getKey());
+            if (currDist > currMinDist)
+                break;
             if (returnDist < currDist)
                 returnDist = currDist;
         }

@@ -328,9 +328,14 @@ public class MainFrame extends JFrame implements ActionListener {
         }
 
         if (e.getSource() == tspItem){
+
             try{
-                String[] nodesKey = JOptionPane.showInputDialog(null, "Enter nodes key \"key1,key2,key3....\""
-                        , "Traveler salesman problem", JOptionPane.INFORMATION_MESSAGE).split(",");
+                String input = JOptionPane.showInputDialog(null, "Enter nodes key \"key1,key2,key3....\""
+                        , "Traveler salesman problem", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println("---"+input+"---");
+                if (input == null)
+                    return;
+                String[] nodesKey = input.split(",");
                 List nodes = new ArrayList<NodeData>(nodesKey.length);
                 for (int i =0; i < nodesKey.length; ++i)
                     nodes.add(this.gAlgo.getGraph().getNode(Integer.parseInt(nodesKey[i])));
