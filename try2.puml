@@ -1,0 +1,89 @@
+@startuml
+class logicControl.Edge {
+- int src
+- int dest
+- double w
+- int tag
++ int getSrc()
++ int getDest()
++ double getWeight()
++ String getInfo()
++ void setInfo(String)
++ int getTag()
++ void setTag(int)
++ String toString()
+}
+class logicControl.Node {
+- int id
+- api.GeoLocation pos
+- double weight
+- int tag
+- String info
++ int getKey()
++ api.GeoLocation getPos()
++ void setPos(api.GeoLocation)
++ double getWeight()
++ void setWeight(double)
++ String getInfo()
++ void setInfo(String)
++ int getTag()
++ void setTag(int)
++ String toString()
+}
+class logicControl.DWGraph {
+- HashMap<Integer,NodeData> Nodes
+- HashMap<Integer,HashMap<Integer,EdgeData>> Edges
+- int MC
+- int edgeSize
++ boolean hasAdj(int)
++ NodeData getNode(int)
++ EdgeData getEdge(int,int)
++ boolean containNode(int)
++ void addNode(NodeData)
++ void connect(int,int,double)
++ Iterator<NodeData> nodeIter()
++ Iterator<EdgeData> edgeIter()
++ Iterator<EdgeData> edgeIter(int)
++ NodeData removeNode(int)
++ EdgeData removeEdge(int,int)
++ int nodeSize()
++ int edgeSize()
++ int getMC()
++ Collection<NodeData> getNodeColl()
++ Collection<EdgeData> getEdgeColl()
++ void resetNodeW()
++ void resetTag()
++ void initFromFile(String)
++ String toString()
+}
+class logicControl.DWGraphAlgo {
+- DWGraph graph
++ void init(DirectedWeightedGraph)
++ DirectedWeightedGraph getGraph()
++ DirectedWeightedGraph copy()
++ boolean isConnected()
++ double shortestPathDist(int,int)
++ List<NodeData> shortestPath(int,int)
++ NodeData center()
++ List<NodeData> tsp(List<NodeData>)
++ boolean save(String)
++ boolean load(String)
+}
+class logicControl.GeoLocation {
+- double x
+- double y
+- double z
++ double x()
++ double y()
++ double z()
++ double distance(api.GeoLocation)
++ String toString()
+}
+
+
+logicControl.EdgeData <|.. logicControl.Edge
+logicControl.NodeData <|.. logicControl.Node
+logicControl.DirectedWeightedGraph <|.. logicControl.DWGraph
+logicControl.DirectedWeightedGraphAlgorithms <|.. logicControl.DWGraphAlgo
+logicControl.GeoLocation <|.. logicControl.GeoLocation
+@enduml
