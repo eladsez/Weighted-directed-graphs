@@ -293,24 +293,25 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
      */
     @Override
     public List<NodeData> tsp(List<NodeData> cities) {
-        double bestDist = Double.MAX_VALUE;
+        double bestDist;
         double newDist;
         List<NodeData> existingRoute = List.copyOf(cities);
         existingRoute = addHelpNodes(existingRoute);
         List<NodeData> newRoute = new LinkedList<>();
         List<NodeData> noSrcRoute = List.copyOf(cities);
 //        noSrcRoute.remove(0);
+        bestDist = routeDist(existingRoute);
 
-        for (int i = 1; i < noSrcRoute.size() - 1; i++) {
-            for (int j = i + 1; j < noSrcRoute.size(); j++) {
-                newRoute = newRoute(existingRoute, noSrcRoute.get(i).getKey(), noSrcRoute.get(j).getKey());
-                newDist = routeDist(newRoute);
-                if (newDist < bestDist) {
-                    existingRoute = newRoute;
-                    bestDist = newDist;
-                }
-            }
-        }
+//        for (int i = 1; i < noSrcRoute.size() - 1; i++) {
+//            for (int j = i + 1; j < noSrcRoute.size(); j++) {
+//                newRoute = newRoute(existingRoute, noSrcRoute.get(i).getKey(), noSrcRoute.get(j).getKey());
+//                newDist = routeDist(newRoute);
+//                if (newDist < bestDist) {
+//                    existingRoute = newRoute;
+//                    bestDist = newDist;
+//                }
+//            }
+//        }
 
         return existingRoute;
     }
@@ -322,24 +323,28 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
         List<NodeData> node1ToNode2 = new LinkedList<>();
         List<NodeData> routeEnd = new LinkedList<>();
 
-        //coping and reversing the order of all the nodes from node1 to node2
-        for (int i = assembledRoute.size()-1; i > node2; i--) {
-            routeEnd.add(assembledRoute.remove(i));
-        }
-
         //coping the end nodes
-        for (int i = node2-1; i >= node1; i--) {
-            node1ToNode2.add(assembledRoute.remove(i));
+        int i = assembledRoute.size()-1;
+        while (existingroute.get(i) != this.graph.getNode(node2)) {
+            routeEnd.add(assembledRoute.remove(i));
+            i--;
+        }
+
+        //coping and reversing the order of all the nodes from node1 to node2
+        int j = node2;
+        while (existingroute.get(j) != this.graph.getNode(node1)) {
+            node1ToNode2.add(assembledRoute.remove(0));
+            j--;
         }
 
         //rebuild the list
-        for (int i = 0, j = node1ToNode2.size(); i < node1ToNode2.size(); i++) {
-            assembledRoute.add(node1ToNode2.remove(i));
+        for (int k = 0; k <= node1ToNode2.size(); k++) {
+            assembledRoute.add(node1ToNode2.remove(0));
         }
 
         //rebuild the list
-        for (int i = 0; i < routeEnd.size(); i++) {
-            assembledRoute.add(routeEnd.remove(i));
+        for (int k = 0; i < routeEnd.size(); k++) {
+            assembledRoute.add(routeEnd.remove(0));
         }
         return assembledRoute;
     }
