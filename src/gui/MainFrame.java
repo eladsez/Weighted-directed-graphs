@@ -7,12 +7,13 @@ import logicControl.DWGraph;
 import logicControl.DWGraphAlgo;
 import logicControl.Node;
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import javax.swing.plaf.FontUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 
@@ -47,7 +48,7 @@ public class MainFrame extends JFrame implements ActionListener {
 
     public MainFrame(DirectedWeightedGraphAlgorithms gAlgo) throws HeadlessException {
         this.gAlgo = (DWGraphAlgo) gAlgo;
-        this.panel = new DrawGraphPanel((DWGraph) gAlgo.getGraph(), null, null, null);
+        this.panel = new DrawGraphPanel((DWGraph) gAlgo.getGraph(), null, null);
         ///// ********* if you want a full screen button ********
 //        this.fsPanel = new JPanel(new GridLayout(1,1,0,0));
 //        this.exitFSPanel = new JPanel(new GridLayout(1,1,0,0));
@@ -168,7 +169,7 @@ public class MainFrame extends JFrame implements ActionListener {
                 }
                 this.setTitle("Your current graph: " + graphName);
                 this.remove(panel);
-                this.panel = new DrawGraphPanel((DWGraph) gAlgo.getGraph(), null, null, null);
+                this.panel = new DrawGraphPanel((DWGraph) gAlgo.getGraph(), null, null);
                 this.add(panel);
                 this.repaint();
                 this.revalidate();
@@ -204,7 +205,7 @@ public class MainFrame extends JFrame implements ActionListener {
                     return;
                 }
                 this.remove(panel);
-                this.panel = new DrawGraphPanel((DWGraph) gAlgo.getGraph(), path, null, CalledFrom.shortestPath);
+                this.panel = new DrawGraphPanel((DWGraph) gAlgo.getGraph(), path, null);
                 this.add(panel);
                 this.repaint();
                 this.revalidate();
@@ -221,7 +222,7 @@ public class MainFrame extends JFrame implements ActionListener {
                         , JOptionPane.ERROR_MESSAGE);
             }
             this.remove(panel);
-            this.panel = new DrawGraphPanel((DWGraph) gAlgo.getGraph(), null, center, CalledFrom.center);
+            this.panel = new DrawGraphPanel((DWGraph) gAlgo.getGraph(), null, center);
             this.add(panel);
             this.repaint();
             this.revalidate();
@@ -262,7 +263,7 @@ public class MainFrame extends JFrame implements ActionListener {
                 Node newNode = new Node(Integer.parseInt(node[0]), geo);
                 this.gAlgo.getGraph().addNode(newNode);
                 this.remove(panel);
-                this.panel = new DrawGraphPanel((DWGraph) gAlgo.getGraph(), null, null, null);
+                this.panel = new DrawGraphPanel((DWGraph) gAlgo.getGraph(), null, null);
                 this.add(panel);
                 this.repaint();
                 this.revalidate();
@@ -279,7 +280,7 @@ public class MainFrame extends JFrame implements ActionListener {
                         , "Remove node", JOptionPane.INFORMATION_MESSAGE);
                 this.gAlgo.getGraph().removeNode(Integer.parseInt(nodeKey));
                 this.remove(panel);
-                this.panel = new DrawGraphPanel((DWGraph) gAlgo.getGraph(), null, null, null);
+                this.panel = new DrawGraphPanel((DWGraph) gAlgo.getGraph(), null, null);
                 this.add(panel);
                 this.repaint();
                 this.revalidate();
@@ -297,7 +298,7 @@ public class MainFrame extends JFrame implements ActionListener {
                 this.gAlgo.getGraph().connect(Integer.parseInt(src_dest_w[0]), Integer.parseInt(src_dest_w[1])
                         ,Double.parseDouble(src_dest_w[2]));
                 this.remove(panel);
-                this.panel = new DrawGraphPanel((DWGraph) gAlgo.getGraph(), null, null, null);
+                this.panel = new DrawGraphPanel((DWGraph) gAlgo.getGraph(), null, null);
                 this.add(panel);
                 this.repaint();
                 this.revalidate();
@@ -315,13 +316,33 @@ public class MainFrame extends JFrame implements ActionListener {
                         , "Remove edge", JOptionPane.PLAIN_MESSAGE).split(",");
                 this.gAlgo.getGraph().removeEdge(Integer.parseInt(src_dest[0]), Integer.parseInt(src_dest[1]));
                 this.remove(panel);
-                this.panel = new DrawGraphPanel((DWGraph) gAlgo.getGraph(), null, null, null);
+                this.panel = new DrawGraphPanel((DWGraph) gAlgo.getGraph(), null, null);
                 this.add(panel);
                 this.repaint();
                 this.revalidate();
             }
             catch (Exception E){
                 JOptionPane.showMessageDialog(null, "Invalid \"src,dest\"", "ERROR"
+                        , JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        if (e.getSource() == tspItem){
+            try{
+                String[] nodesKey = JOptionPane.showInputDialog(null, "Enter nodes key \"key1,key2,key3....\""
+                        , "Traveler salesman problem", JOptionPane.INFORMATION_MESSAGE).split(",");
+                List nodes = new ArrayList<NodeData>(nodesKey.length);
+                for (int i =0; i < nodesKey.length; ++i)
+                    nodes.add(this.gAlgo.getGraph().getNode(Integer.parseInt(nodesKey[i])));
+                List tspNodes  = this.gAlgo.tsp(nodes);
+                this.remove(panel);
+                this.panel = new DrawGraphPanel((DWGraph) gAlgo.getGraph(), tspNodes, null);
+                this.add(panel);
+                this.repaint();
+                this.revalidate();
+            }
+            catch (Exception E){
+                JOptionPane.showMessageDialog(null, "Invalid nodes key", "ERROR"
                         , JOptionPane.ERROR_MESSAGE);
             }
         }

@@ -11,29 +11,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-enum CalledFrom{
-    center,
-    shortestPath,
-    shortestPathDist,
-    tsp,
-    isConnected
-}
-
 public class DrawGraphPanel extends JPanel {
 
     private Dimension screenSize;
     private DWGraph graph;
     private HashMap<Integer, Integer> nodeXpos;
     private HashMap<Integer, Integer> nodeYpos;
-    private Graphics panelG;
     private List colored;
     private Node center;
-    private CalledFrom calldFrom;
 
-    public DrawGraphPanel(DWGraph g, List colored, Node center, CalledFrom call) {
+    public DrawGraphPanel(DWGraph g, List colored, Node center) {
         this.setLayout(null);
         this.graph = g;
-        this.calldFrom = call;
         this.colored = colored;
         this.center = center;
         this.nodeXpos = new HashMap<>(this.graph.nodeSize());
@@ -44,7 +33,6 @@ public class DrawGraphPanel extends JPanel {
 
     @Override
     public void paintComponent(Graphics g){
-        this.panelG = g;
         updateArr();
         drawEdges(g);
         drawNodes(g);

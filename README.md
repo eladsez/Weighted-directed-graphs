@@ -38,10 +38,15 @@ We've implemented the algorithm in the following way:
   3. return the node with the shortest one.  
 
 * `tsp` - return the shrotest path between a list of nodes.   
-**Approach:** we are usuing greedy algorithm, in order to get an acceptble path at reasonble time.
+**Approach:** we are using swaping algorithm, in order to get an acceptble path at reasonble time.
 We've implemented the algorithm in the following way:    
-  1. 
+  1. Start with a random route that start in the source node.
+  2. Perform a swap between two nodes (except the source).
+  3. Keep new route if it is shorter.
+  4. Repeat (2-3) for all possible swaps.
+since in this assignment we are not required to return to the source node it's simplify the solution a bit.
 
+<img align="center" width="500" src="2-opt.gif">
 
 ## Structure:  
 

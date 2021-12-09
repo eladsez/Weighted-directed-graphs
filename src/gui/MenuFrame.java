@@ -114,7 +114,7 @@ public class MenuFrame extends JFrame implements ActionListener {
         }
 
         if (e.getSource() == showGraph){
-            this.setVisible(false);
+            new MainFrame(this.algo);
         }
 
 
