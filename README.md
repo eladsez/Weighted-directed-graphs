@@ -86,6 +86,11 @@ Class | Description
 `Edge` | This class represent an edge.
 `Node` | This class represent a node.
 
+
+### UML:
+![](diagram.jpg)
+
+
 ## How To Run:
 
 # GUI:
