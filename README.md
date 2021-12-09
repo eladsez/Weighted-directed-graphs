@@ -1,21 +1,54 @@
 # Weighted directed graphs (directed networks)
 
-> Made by Nerya Bigon.  
+> made by Elad Seznayev and Nerya Bigon.
+* As part of OOP course assignment.
 
 ## Goal:
 The goal of this assignment is to design and implement two key interfaces:
 * Weighted directed graph interface.
 * Weighted directed graphs algorithms interface.  
 
-In addition we'll create a graphical inteface that allows you to load graphs from files, save them, edit them and run algorithms on them.  
+In addition we'll create a graphical inteface that allows you to load graphs from files, save them, edit them and run algorithms on them.   
+
+## Algorithms:
+* `isConnected` - return whether the graph is strongly connected or not.  
+We've implemented the algorithm in the following way:    
+  1. run BFS algorithms from a specific node to all of the other nodes
+  2. run BFS again, this time on the graph transposed.
+  3. check if the BFS's results are equals to each othe and to the nuber of nodes in the graph.
+  4. if so - the graph is strongly connected.  
+
+* `shortestPathDist` - return the distance of the shortest path between two nodes.  
+We've implemented the algorithm in the following way:    
+  1. run DIJKSTRA algorithm on the source node - in order to get in each node the shortest path from the source, and the distance. 
+  2. the answer is contained in the destination node's weight parameter.
+  3. so we return it.  
+
+* `shortestPath` - return the shortest path between two nodes.  
+We've implemented the algorithm in the following way:    
+  1. run DIJKSTRA algorithm on the source node - in order to get in each node the shortest path from the source, and the distance. 
+  2. because each node tag "carry" the node that came before it in the path, all there is to do is to loop from the destination node and ask who came before until we get to the source node.
+  3. the results are then inserted into a list and returned.  
+
+* `center` - return the node that is the closest to every other node.   
+Approach: we are searching for the node with the shortest path, but from the longest result this node got from `shortestPathDist`.
+We've implemented the algorithm in the following way:    
+  1. loop through all of the nodes in the graph.
+  2. for each node check with `shortestPathDist` what is the **longest** path
+  3. the results are then inserted into a list and returned.
+
 
 ## Structure:  
 
 Class | Description
 ----- | -----------
-`Ex1` | The main class, that drive everything.
-`DirectedWeightedGraph` |
-`DirectedWeightedGraphAlgorithms` |
-`EdgeData` | 
-`GeoLocation` |
-`NodeData` |
+`Ex2` | The main class, that drive everything.
+`DWGraph` | This class represent the graph.
+`DWGraphAlgo` | this class holds all of the algorithms.
+`Edge` | This class represent an edge.
+`Node` | This class represent a node.
+
+## How To Run:
+
+# GUI:
+ 

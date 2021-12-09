@@ -81,12 +81,28 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
      */
     @Override
     public boolean isConnected() {
-        DWGraph trans = (DWGraph) DWGraph.transpose(this.graph);
+        DWGraph trans = (DWGraph) transpose(this.graph);
         // TODO check if there is another src to give to the bfs
         boolean ans = bfs(this.graph, 0) == this.graph.nodeSize() && this.graph.nodeSize() == bfs(trans, 0);
         this.graph.resetTag();
         return ans;
     }
+
+     private DirectedWeightedGraph transpose(DirectedWeightedGraph graph){
+        DirectedWeightedGraph returnG = new DWGraph();
+        Iterator iter = graph.nodeIter();
+        while (iter.hasNext())
+            returnG.addNode(new Node((Node) iter.next()));
+
+        iter = graph.edgeIter();
+        Edge currEdge;
+        while (iter.hasNext()){
+            currEdge = (Edge) iter.next();
+            returnG.connect(currEdge.getDest(), currEdge.getSrc(), currEdge.getWeight());
+        }
+        return returnG;
+    }
+
 
     /// 0 - unvisited ,  1 - in progress,  2 - visited
     private static int bfs(DWGraph graph, int src) {

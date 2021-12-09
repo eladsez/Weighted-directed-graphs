@@ -227,13 +227,16 @@ public class DWGraph implements DirectedWeightedGraph {
      */
     @Override
     public NodeData removeNode(int key) {
-        this.edgeSize -= this.Edges.get(key).size(); // decrease the amount of edges going out from this node(key)
-        this.Edges.remove(key); // remove the edges going out from this node(key)
+        if(this.Edges.containsKey(key)) {
+            this.edgeSize -= this.Edges.get(key).size(); // decrease the amount of edges going out from this node(key)
+            this.Edges.remove(key); // remove the edges going out from this node(key)
+        }
         //remove the edges going into this node(key)
         this.Edges.forEach((src, HashMap) -> {
-            if (HashMap.containsKey(key))
+            if (HashMap.containsKey(key)) {
                 this.edgeSize--;
-            HashMap.remove(key);
+                HashMap.remove(key);
+            }
         });
         this.MC++; // increase changes to graph
         return this.Nodes.remove(key); // simply remove the node
@@ -309,21 +312,6 @@ public class DWGraph implements DirectedWeightedGraph {
         Nodes.forEach((id, node) -> {
             node.setTag(0);
         });
-    }
-
-    public static DirectedWeightedGraph transpose(DirectedWeightedGraph graph){
-       DirectedWeightedGraph returnG = new DWGraph();
-       Iterator iter = graph.nodeIter();
-       while (iter.hasNext())
-           returnG.addNode(new Node((Node) iter.next()));
-
-       iter = graph.edgeIter();
-       Edge currEdge;
-       while (iter.hasNext()){
-           currEdge = (Edge) iter.next();
-           returnG.connect(currEdge.getDest(), currEdge.getSrc(), currEdge.getWeight());
-       }
-        return returnG;
     }
 
     /**
