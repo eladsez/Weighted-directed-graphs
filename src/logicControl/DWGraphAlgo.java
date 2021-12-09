@@ -90,6 +90,11 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
         return ans;
     }
 
+    /**
+     * This function is a helper for isConnected
+     * @param graph (directed weighted)
+     * @return the transpose graph of the given one
+     */
      private DirectedWeightedGraph transpose(DirectedWeightedGraph graph){
         DirectedWeightedGraph returnG = new DWGraph();
         Iterator iter = graph.nodeIter();
@@ -203,7 +208,7 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
      *
      * @param src  - start node
      * @param dest - end (target) node
-     * @return
+     * @return a list of the ordered nodes
      */
     @Override
     public List<NodeData> shortestPath(int src, int dest) {
@@ -229,7 +234,7 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
 
     /**
      * Finds the NodeData which minimizes the max distance to all the other nodes.
-     * Assuming the graph isConnected, elese return null. See: https://en.wikipedia.org/wiki/Graph_center
+     * Assuming the graph isConnected, else return null. See: https://en.wikipedia.org/wiki/Graph_center
      *
      * @return the Node data to which the max shortest path to all the other nodes is minimized.
      */
