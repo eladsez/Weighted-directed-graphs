@@ -44,7 +44,7 @@ We've implemented the algorithm in the following way:
   2. Perform a swap between nodes (except the source).
   3. Keep new route if it is shorter.
   4. Repeat (2-3) for all possible swaps.
-since in this assignment we are not required to return to the source node it's simplify the solution a bit.
+since in this assignment we are not required to return to the source node it's simplify the solution a bit.  
 This algorithm is both faster, O(M*N^2) and produces better solutions. The intuition behind the algorithm is that swapping untangles routes that cross over itself.  
 This swap algorithm performed much better than greedy; the path it drew looks similar to something a human might draw.
 
