@@ -64,24 +64,44 @@ class DWGraphAlgoTest {
 
     @Test
     void center() {
-        Node center = (Node) this.algo.center();
-        assertTrue(center.getKey() == 17);
-
         this.algo.load("Data/1000Nodes.json");
-        center = (Node) this.algo.center();
+//        Node center = (Node) this.algo.center();
     }
 
     @Test
     void tsp() {
+        this.algo.load("Data/1000Nodes.json");
         List<NodeData> tspTR = new LinkedList<>();
         NodeData n1 = new Node((Node) algo.getGraph().getNode(1));
         NodeData n2 = new Node((Node) algo.getGraph().getNode(2));
         NodeData n3 = new Node((Node) algo.getGraph().getNode(3));
         NodeData n4 = new Node((Node) algo.getGraph().getNode(4));
+        NodeData n5 = new Node((Node) algo.getGraph().getNode(5));
+        NodeData n6 = new Node((Node) algo.getGraph().getNode(6));
+        NodeData n7 = new Node((Node) algo.getGraph().getNode(7));
+//        NodeData n8 = new Node((Node) algo.getGraph().getNode(8));
+//        NodeData n9 = new Node((Node) algo.getGraph().getNode(9));
+//        NodeData n10 = new Node((Node) algo.getGraph().getNode(10));
+//        NodeData n11 = new Node((Node) algo.getGraph().getNode(11));
+//        NodeData n12 = new Node((Node) algo.getGraph().getNode(12));
+//        NodeData n13 = new Node((Node) algo.getGraph().getNode(13));
+//        NodeData n14 = new Node((Node) algo.getGraph().getNode(14));
+//        NodeData n15 = new Node((Node) algo.getGraph().getNode(15));
         tspTR.add(n1);
         tspTR.add(n2);
         tspTR.add(n3);
         tspTR.add(n4);
+        tspTR.add(n5);
+        tspTR.add(n6);
+        tspTR.add(n7);
+//        tspTR.add(n8);
+//        tspTR.add(n9);
+//        tspTR.add(n10);
+//        tspTR.add(n11);
+//        tspTR.add(n12);
+//        tspTR.add(n13);
+//        tspTR.add(n14);
+//        tspTR.add(n15);
         List<NodeData> ans = algo.tsp(tspTR);
     }
 

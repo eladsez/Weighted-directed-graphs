@@ -295,8 +295,14 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
      */
     @Override
     public List<NodeData> tsp(List<NodeData> cities) {
+        //run only on strongly connected graphs
         if (!isConnected() || cities.size() == 0)
             return null;
+        //check to make sure the nodes exist in the graph (can be disabled if there is no chance for wrong input)
+        for (NodeData node : cities) {
+            if (!this.graph.containNode(node.getKey()))
+                return null;
+        }
         double bestDist;
         double newDist;
         List<NodeData> existingRoute = List.copyOf(cities);
@@ -310,13 +316,13 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
         for (int i = 1; i < noSrcRoute.size() - 1; i++) {
             for (int j = i + 1; j < noSrcRoute.size(); j++) {
                 tmp2 = List.copyOf(tmp1); //keeping them in case the changes didn't get us shorter path.
-                tmp1 = newRoute(noSrcRoute, i, j); //changing the order of the i,j nodes.
-                newRoute = addHelpNodes(tmp1);
+                tmp1 = newRoute(tmp2, i, j); //changing the order of the i,j nodes -> attempting new order
+                newRoute = addHelpNodes(tmp1); //adding middle nodes from the graph if necessary
                 newDist = routeDist(newRoute);
                 if (newDist < bestDist) {
                     existingRoute = newRoute;
                     bestDist = newDist;
-                } else {
+                } else { //if the new order isn't better we revert to the old one and keep trying
                     tmp1 = tmp2;
                 }
 
@@ -328,7 +334,7 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
 
     //creating new possible route
     private List<NodeData> newRoute(List<NodeData> nosrc, int node1, int node2) {
-        if (node2 == nosrc.get(nosrc.size()-1).getKey()) {return nosrc;}
+//        if (node2 == nosrc.get(nosrc.size()-1).getKey()) {return nosrc;}
         List<NodeData> assembledRoute = new ArrayList<>(List.copyOf(nosrc));
         List<NodeData> node1ToNode2 = new LinkedList<>();
         List<NodeData> routeEnd = new LinkedList<>();
@@ -343,15 +349,11 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
             node1ToNode2.add(assembledRoute.remove(i));
         }
 
-        //rebuild the list
-        for (int i = 0; i <= node1ToNode2.size(); i++) {
-            assembledRoute.add(node1ToNode2.remove(0));
-        }
+        //rebuild the list middle
+        assembledRoute.addAll(node1ToNode2);
 
-        //rebuild the list
-        for (int i = 0; i < routeEnd.size(); i++) {
-            assembledRoute.add(routeEnd.remove(0));
-        }
+        //rebuild the list end
+        assembledRoute.addAll(routeEnd);
         return assembledRoute;
     }
 
@@ -371,7 +373,7 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
         return dist;
     }
 
-    //adding nodes in the way from the graph
+    //adding nodes in the way from the graph and using shortestPath to do so in order of keeping the number of nodes added to the minimum necessary
     private List<NodeData> addHelpNodes(List<NodeData> addNodeTo) {
         List<NodeData> assembledRoute = new LinkedList<>();
         List<NodeData> addedNodes = new LinkedList<>();
