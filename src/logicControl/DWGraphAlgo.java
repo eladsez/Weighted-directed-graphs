@@ -302,52 +302,54 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
         List<NodeData> existingRoute = List.copyOf(cities);
         existingRoute = addHelpNodes(existingRoute);
         List<NodeData> newRoute = new LinkedList<>();
+        List<NodeData> tmp2 = new LinkedList<>();
         List<NodeData> noSrcRoute = List.copyOf(cities);
-//        noSrcRoute.remove(0);
+        List<NodeData> tmp1 = List.copyOf(cities);
         bestDist = routeDist(existingRoute);
 
-//        for (int i = 1; i < noSrcRoute.size() - 1; i++) {
-//            for (int j = i + 1; j < noSrcRoute.size(); j++) {
-//                newRoute = newRoute(existingRoute, noSrcRoute.get(i).getKey(), noSrcRoute.get(j).getKey());
-//                newDist = routeDist(newRoute);
-//                if (newDist < bestDist) {
-//                    existingRoute = newRoute;
-//                    bestDist = newDist;
-//                }
-//            }
-//        }
+        for (int i = 1; i < noSrcRoute.size() - 1; i++) {
+            for (int j = i + 1; j < noSrcRoute.size(); j++) {
+                tmp2 = List.copyOf(tmp1); //keeping them in case the changes didn't get us shorter path.
+                tmp1 = newRoute(noSrcRoute, i, j); //changing the order of the i,j nodes.
+                newRoute = addHelpNodes(tmp1);
+                newDist = routeDist(newRoute);
+                if (newDist < bestDist) {
+                    existingRoute = newRoute;
+                    bestDist = newDist;
+                } else {
+                    tmp1 = tmp2;
+                }
+
+            }
+        }
 
         return existingRoute;
     }
 
     //creating new possible route
-    private List<NodeData> newRoute(List<NodeData> existingroute, int node1, int node2) {
-        if (node2 == existingroute.get(existingroute.size()-1).getKey()) {return existingroute;}
-        List<NodeData> assembledRoute = new ArrayList<>(List.copyOf(existingroute));
+    private List<NodeData> newRoute(List<NodeData> nosrc, int node1, int node2) {
+        if (node2 == nosrc.get(nosrc.size()-1).getKey()) {return nosrc;}
+        List<NodeData> assembledRoute = new ArrayList<>(List.copyOf(nosrc));
         List<NodeData> node1ToNode2 = new LinkedList<>();
         List<NodeData> routeEnd = new LinkedList<>();
 
         //coping the end nodes
-        int i = assembledRoute.size()-1;
-        while (existingroute.get(i) != this.graph.getNode(node2)) {
+        for (int i = assembledRoute.size() - 1; i > node2; i--) {
             routeEnd.add(assembledRoute.remove(i));
-            i--;
         }
 
         //coping and reversing the order of all the nodes from node1 to node2
-        int j = node2;
-        while (existingroute.get(j) != this.graph.getNode(node1)) {
-            node1ToNode2.add(assembledRoute.remove(0));
-            j--;
+        for (int i = node2; i >= node1; i--) {
+            node1ToNode2.add(assembledRoute.remove(i));
         }
 
         //rebuild the list
-        for (int k = 0; k <= node1ToNode2.size(); k++) {
+        for (int i = 0; i <= node1ToNode2.size(); i++) {
             assembledRoute.add(node1ToNode2.remove(0));
         }
 
         //rebuild the list
-        for (int k = 0; i < routeEnd.size(); k++) {
+        for (int i = 0; i < routeEnd.size(); i++) {
             assembledRoute.add(routeEnd.remove(0));
         }
         return assembledRoute;
@@ -370,13 +372,13 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
     }
 
     //adding nodes in the way from the graph
-    private List<NodeData> addHelpNodes(List<NodeData> existingroute) {
+    private List<NodeData> addHelpNodes(List<NodeData> addNodeTo) {
         List<NodeData> assembledRoute = new LinkedList<>();
         List<NodeData> addedNodes = new LinkedList<>();
 
-        for (int i = 0, j = i + 1; j < existingroute.size(); i++, j++) {
+        for (int i = 0, j = i + 1; j < addNodeTo.size(); i++, j++) {
             addedNodes.clear();
-            addedNodes.addAll(shortestPath(existingroute.get(i).getKey(), existingroute.get(j).getKey()));
+            addedNodes.addAll(shortestPath(addNodeTo.get(i).getKey(), addNodeTo.get(j).getKey()));
             if (i > 0) {
                 addedNodes.remove(0);
                 assembledRoute.addAll(addedNodes);
