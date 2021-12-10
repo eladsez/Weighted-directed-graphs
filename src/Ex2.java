@@ -6,6 +6,7 @@ import logicControl.DWGraphAlgo;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * This class is the main class for Ex2 - your implementation will be tested using this class.
@@ -50,4 +51,5 @@ public class Ex2 {
     public static void main(String[] args) {
         runGUI("Data/G1.json");
     }
+
 }

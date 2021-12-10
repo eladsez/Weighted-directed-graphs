@@ -314,6 +314,12 @@ public class DWGraph implements DirectedWeightedGraph {
         });
     }
 
+    public void resetEdgeInfo(){
+        Iterator<EdgeData>  iter= edgeIter();
+        while (iter.hasNext())
+            iter.next().setInfo("");
+    }
+
     /**
      * this function Loading the graph from a Json file
      *
