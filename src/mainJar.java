@@ -17,7 +17,6 @@ public class mainJar {
     }
 
     public static void main(String[] args) {
-        DirectedWeightedGraphAlgorithms alg = getGrapgAlgo(args[0]);
-        new MainFrame(alg);
+        Ex2.runGUI(args[1]);
     }
 }

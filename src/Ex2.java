@@ -49,9 +49,9 @@ public class Ex2 {
     }
 
     public static void main(String[] args) {
-        DirectedWeightedGraphAlgorithms a = getGrapgAlgo("Data/G1.json");
-        System.out.println(a.center());
-//        runGUI("Data/G1.json");
+//        DirectedWeightedGraphAlgorithms a = getGrapgAlgo("Data/G1.json");
+//        System.out.println(a.center());
+        runGUI("Data/G1.json");
     }
 
 }
