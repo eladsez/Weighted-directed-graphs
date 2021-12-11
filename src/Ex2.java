@@ -4,9 +4,8 @@ import gui.MainFrame;
 import logicControl.DWGraph;
 import logicControl.DWGraphAlgo;
 import org.json.simple.parser.ParseException;
-
 import java.io.IOException;
-import java.util.HashMap;
+
 
 /**
  * This class is the main class for Ex2 - your implementation will be tested using this class.

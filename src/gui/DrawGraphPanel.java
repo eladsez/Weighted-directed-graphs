@@ -5,7 +5,6 @@ import api.NodeData;
 import logicControl.DWGraph;
 import logicControl.Edge;
 import logicControl.Node;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.QuadCurve2D;
@@ -105,6 +104,27 @@ public class DrawGraphPanel extends JPanel {
     private void drawEdges(Graphics g) {
         List<EdgeData> coloredEdges = getColoredFromNode();
         Graphics2D g2 = (Graphics2D) g;
+        Iterator iter = this.graph.edgeIter();
+        Edge curr;
+        while (iter.hasNext()) {
+            curr = (Edge) iter.next();
+            if (!coloredEdges.contains(curr)) {
+                if (this.graph.getEdge(curr.getDest(), curr.getSrc()) != null
+                        && this.graph.getEdge(curr.getDest(), curr.getSrc()).getInfo() == "done"){
+                    drawArrowLine(g2, this.nodeXpos.get(curr.getSrc()) + 10, this.nodeYpos.get(curr.getSrc()) + 10, this.nodeXpos.get(curr.getDest()) + 10
+                            , this.nodeYpos.get(curr.getDest()) + 10, 25, 5, true, Color.BLACK);
+                    curr.setInfo("done");
+                    continue;
+                }
+                else if (this.graph.getEdge(curr.getDest(), curr.getSrc()) == null
+                        || this.graph.getEdge(curr.getDest(), curr.getSrc()).getInfo() != "done"){
+                    drawArrowLine(g2, this.nodeXpos.get(curr.getSrc()) + 10, this.nodeYpos.get(curr.getSrc()) + 10, this.nodeXpos.get(curr.getDest()) + 10
+                            , this.nodeYpos.get(curr.getDest()) + 10, 25, 5, false, Color.BLACK);
+                    curr.setInfo("done");
+                    continue;
+                }
+            }
+        }
         for (EdgeData coloredEdge : coloredEdges) {
             if (this.graph.getEdge(coloredEdge.getDest(), coloredEdge.getSrc()) != null
                     && this.graph.getEdge(coloredEdge.getDest(), coloredEdge.getSrc()).getInfo() == "done") {
@@ -120,27 +140,6 @@ public class DrawGraphPanel extends JPanel {
                 continue;
             }
 
-        }
-        Iterator iter = this.graph.edgeIter();
-        Edge curr;
-        while (iter.hasNext()) {
-            curr = (Edge) iter.next();
-            if (!coloredEdges.contains(curr)) {
-                if (this.graph.getEdge(curr.getDest(), curr.getSrc()) != null
-                        && this.graph.getEdge(curr.getDest(), curr.getSrc()).getInfo() == "done"){
-                    drawArrowLine(g2, this.nodeXpos.get(curr.getSrc()) + 10, this.nodeYpos.get(curr.getSrc()) + 10, this.nodeXpos.get(curr.getDest()) + 10
-                            , this.nodeYpos.get(curr.getDest()) + 10, 25, 5, true, Color.BLACK);
-                    curr.setInfo("done");
-                    continue;
-                }
-               else if (this.graph.getEdge(curr.getDest(), curr.getSrc()) == null
-                        || this.graph.getEdge(curr.getDest(), curr.getSrc()).getInfo() != "done"){
-                drawArrowLine(g2, this.nodeXpos.get(curr.getSrc()) + 10, this.nodeYpos.get(curr.getSrc()) + 10, this.nodeXpos.get(curr.getDest()) + 10
-                        , this.nodeYpos.get(curr.getDest()) + 10, 25, 5, false, Color.BLACK);
-                curr.setInfo("done");
-                    continue;
-                }
-            }
         }
         this.graph.resetEdgeInfo();
     }
