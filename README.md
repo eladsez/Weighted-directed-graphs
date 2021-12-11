@@ -45,7 +45,8 @@ We've implemented the algorithm in the following way:
   3. Keep new route if it is shorter.
   4. Repeat (2-3) for all possible swaps.
 since in this assignment we are not required to return to the source node it's simplify the solution a bit.  
-This algorithm is both faster, O(M*N^2) and produces better solutions. The intuition behind the algorithm is that swapping untangles routes that cross over itself.  
+This algorithm is both faster, O(M*N^2) and produces better solutions then greedy algorithm.  
+The intuition behind the algorithm is that swapping untangles routes that cross over itself (gets rid of circel's when posible).  
 This swap algorithm performed much better than greedy; the path it drew looks similar to something a human might draw.
 
 <img align="center" width="500" src="2-opt.gif">
@@ -56,17 +57,32 @@ This swap algorithm performed much better than greedy; the path it drew looks si
 Class | Description
 ----- | -----------
 `Ex2` | The main class, that drive everything.
-`DWGraph` | This class represent the graph.
-`DWGraphAlgo` | this class holds all of the algorithms.
-`Edge` | This class represent an edge.
-`Node` | This class represent a node.
+`DWGraph` | This class represent the graph -> implements the DirectedWeightedGraph interface.
+`DWGraphAlgo` | this class holds all of the algorithms -> implements the DirectedWeightedGraphAlgorithms interface.
+`Edge` | This class represent an edge -> impelments the EdgeData interface.
+`Node` | This class represent a node -> impelments the NodeData interface.
 
 
 ### UML:
 ![](diagram.jpg)
 
 
-## How To Run:
-
 # GUI:
+In addition we've implemented GUI interface that allow interaction with the code and algorithms in a graphical and interactive way.  
+
+#### To use the GUI do the follwing: 
+1. Download the Ex2.jar file that can be found in the main folder of this repository.
+2. Put the Ex2.jar file in a foder along with a json file that represent a graph, (such files can be found in the Data folder in this repository).
+3. Open a terminal in this folder, and run the following comand:  
+
+```
+java -jar Ex2.jar <graph.json>
+```  
+
+## How To Run:
+to run the algorithms, without the GUI interface, do the following:
+1. Download this repository and open it in an IDE.
+2. In the Ex2.java (in the src folder) go to the bottom of the file and choose a graph (json graph files can be found in the Data folder).
+3. Next choose an algorithm to run on the graph, and finaly run the main function in the Ex2.java file. 
+
  
