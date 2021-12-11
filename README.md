@@ -64,7 +64,28 @@ Class | Description
 
 
 ### UML:
-![](diagram.jpg)
+![](diagram.jpg)  
+
+## Results:
+### Running Algorithms:
+##### Center:
+G1 - 13 ms  
+G2 - 16 ms  
+G3 - 69 ms  
+1000 vertices - 3 sec 600 ms  
+10000 vertices -   
+##### Isconnected:  
+G1 - 7 ms  
+G2 - 7 ms  
+G3 - 8 ms  
+1000 vertices - 76 ms  
+10000 vertices - 533 ms  
+##### TSP (path of 7 nodes):
+G1 - 15 ms  
+G2 - 25 ms  
+G3 - 37 ms  
+1000 vertices - 16 sec  
+10000 vertices - timeout  
 
 
 # GUI:
