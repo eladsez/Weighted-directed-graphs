@@ -1,10 +1,8 @@
 package logicControl;
 
 import api.DirectedWeightedGraph;
-import api.EdgeData;
 import api.NodeData;
 import org.json.simple.parser.ParseException;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;

@@ -15,12 +15,14 @@ public class Edge implements api.EdgeData {
     private int dest;
     private double w; ///Weight
     private int tag;
+    private String info;
 
     //constructors
     public Edge(int src, int dest, double w) {
         this.src = src;
         this.dest = dest;
         this.w = w;
+        this.info = "";
     }
 
     public Edge(Edge e){
@@ -47,12 +49,12 @@ public class Edge implements api.EdgeData {
 
     @Override
     public String getInfo() {
-        return null;////// complete
+        return this.info;
     }
 
     @Override
     public void setInfo(String s) {
-        ////// complete
+        this.info = s;
     }
 
     @Override
