@@ -270,10 +270,11 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
             if (checkNode.getKey() == src)
                 continue;
             currDist = shortestPathDist(src, checkNode.getKey());
-            if (currDist > currMinDist)
-                break;
             if (returnDist < currDist)
                 returnDist = currDist;
+            if (currDist > currMinDist)
+                break;
+
         }
         return returnDist;
     }

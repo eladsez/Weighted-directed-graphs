@@ -76,7 +76,7 @@ public class MainFrame extends JFrame implements ActionListener {
         this.removeNodeItem = new JMenuItem("Remove Node");
         this.removeEdgeItem = new JMenuItem("Remove Edge");
 
-        Color color = new Color(0,160,160);
+        Color color = new Color(40,40,42);
         Font font = new Font("Serif", Font.PLAIN, 20);
         UIManager.put("OptionPane.messageFont", new FontUIResource(font));
 
@@ -340,7 +340,7 @@ public class MainFrame extends JFrame implements ActionListener {
             try{
                 String input = JOptionPane.showInputDialog(null, "Enter nodes key \"key1,key2,key3....\""
                         , "Traveler salesman problem", JOptionPane.INFORMATION_MESSAGE);
-                System.out.println("---"+input+"---");
+//                System.out.println("---"+input+"---");
                 if (input == null)
                     return;
                 String[] nodesKey = input.split(",");

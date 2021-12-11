@@ -86,15 +86,15 @@ public class DrawGraphPanel extends JPanel {
         while (iter.hasNext()) {
             curr = (Node) iter.next();
             if (curr == center) {
-                g2.setColor(Color.WHITE);
+                g2.setColor(new Color(100,130,140));
                 g2.setFont(new Font("Serif", Font.CENTER_BASELINE, 18));
                 g2.drawString("Center", this.nodeXpos.get(curr.getKey()) - 7, this.nodeYpos.get(curr.getKey()) - 10);
                 g2.setStroke(new BasicStroke(7));
-                g2.setColor(Color.WHITE);
+                g2.setColor(Color.green);
                 g2.drawOval(this.nodeXpos.get(curr.getKey()) - 1, this.nodeYpos.get(curr.getKey()) - 1, 20, 20);
                 g2.setFont(new Font("Serif", Font.CENTER_BASELINE, 12));
             }
-            g2.setColor(Color.RED);
+            g2.setColor(Color.cyan);
             g2.fillOval(this.nodeXpos.get(curr.getKey()), this.nodeYpos.get(curr.getKey()), 19, 19);
             g2.setColor(Color.BLACK);
             g2.setStroke(new BasicStroke(2));
@@ -109,13 +109,13 @@ public class DrawGraphPanel extends JPanel {
             if (this.graph.getEdge(coloredEdge.getDest(), coloredEdge.getSrc()) != null
                     && this.graph.getEdge(coloredEdge.getDest(), coloredEdge.getSrc()).getInfo() == "done") {
                 drawArrowLine(g2, this.nodeXpos.get(coloredEdge.getSrc()) + 10, this.nodeYpos.get(coloredEdge.getSrc()) + 10, this.nodeXpos.get(coloredEdge.getDest()) + 10
-                        , this.nodeYpos.get(coloredEdge.getDest()) + 10, 25, 5, true, Color.MAGENTA);
+                        , this.nodeYpos.get(coloredEdge.getDest()) + 10, 25, 5, true, Color.PINK);
                 coloredEdge.setInfo("done");
                 continue;
             } else if (this.graph.getEdge(coloredEdge.getDest(), coloredEdge.getSrc()) == null
                     || this.graph.getEdge(coloredEdge.getDest(), coloredEdge.getSrc()).getInfo() != "done") {
                 drawArrowLine(g2, this.nodeXpos.get(coloredEdge.getSrc()) + 10, this.nodeYpos.get(coloredEdge.getSrc()) + 10, this.nodeXpos.get(coloredEdge.getDest()) + 10
-                        , this.nodeYpos.get(coloredEdge.getDest()) + 10, 25, 5, false, Color.MAGENTA);
+                        , this.nodeYpos.get(coloredEdge.getDest()) + 10, 25, 5, false, Color.pink);
                 coloredEdge.setInfo("done");
                 continue;
             }
@@ -215,7 +215,7 @@ public class DrawGraphPanel extends JPanel {
 
         g2.fillPolygon(xpoints, ypoints, 3);
         g2.setStroke(new BasicStroke(1));
-        g2.setColor(Color.WHITE);
+        g2.setColor(Color.GRAY);
         g2.drawPolygon(xpoints, ypoints, 3);
     }
 
