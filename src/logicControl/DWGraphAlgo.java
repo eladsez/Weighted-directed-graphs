@@ -41,7 +41,7 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
     /**
      * Inits the graph on which this set of algorithms operates on.
      *
-     * @param g
+     * @param g The graph we want to initial
      */
     @Override
     public void init(DirectedWeightedGraph g) {
@@ -55,6 +55,9 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
         return this.graph;
     }
 
+    /**
+     * @return deep copy of the graph
+     */
     @Override
     public DirectedWeightedGraph copy() {
         DWGraph returnGraph = new DWGraph();
@@ -91,7 +94,7 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
 
     /**
      * This function is a helper for isConnected
-     * @param graph (directed weighted)
+     * @param graph (directed weighted one)
      * @return the transpose graph of the given one
      */
     private DirectedWeightedGraph transpose(DirectedWeightedGraph graph) {

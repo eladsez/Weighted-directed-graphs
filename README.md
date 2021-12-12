@@ -1,6 +1,6 @@
 # Weighted directed graphs (directed networks)
 
-> made by Elad Seznayev and Nerya Bigon.
+> Made by Elad Seznayev and Nerya Bigon.
 * As part of OOP course assignment.
 
 ## Goal:
@@ -13,29 +13,29 @@ In addition we'll create a graphical inteface that allows you to load graphs fro
 ## Algorithms:
 * `isConnected` - return whether the graph is strongly connected or not.  
 We've implemented the algorithm in the following way:    
-  1. run BFS algorithms from a specific node to all of the other nodes
-  2. run BFS again, this time on the graph transposed.
-  3. check if the BFS's results are equals to each othe and to the nuber of nodes in the graph.
-  4. if so - the graph is strongly connected.  
+  1. Run BFS algorithms from a specific node to all of the other nodes
+  2. Run BFS again, this time on the graph transposed.
+  3. Check if the BFS's results are equals to each othe and to the nuber of nodes in the graph.
+  4. If so - the graph is strongly connected.  
 
 * `shortestPathDist` - return the distance of the shortest path between two nodes.  
 We've implemented the algorithm in the following way:    
-  1. run DIJKSTRA algorithm on the source node - in order to get in each node the shortest path from the source, and the distance. 
-  2. the answer is contained in the destination node's weight parameter.
-  3. so we return it.  
+  1. Run DIJKSTRA algorithm on the source node - in order to get in each node the shortest path from the source, and the distance. 
+  2. The answer is contained in the destination node's weight parameter.
+  3. So we return it.  
 
 * `shortestPath` - return the shortest path between two nodes.  
 We've implemented the algorithm in the following way:    
-  1. run DIJKSTRA algorithm on the source node - in order to get in each node the shortest path from the source, and the distance. 
-  2. because each node tag "carry" the node that came before it in the path, all there is to do is to loop from the destination node and ask who came before until we get to the source node.
-  3. the results are then inserted into a list and returned.  
+  1. Run DIJKSTRA algorithm on the source node - in order to get in each node the shortest path from the source, and the distance. 
+  2. Because each node tag "carry" the node that came before it in the path, all there is to do is to loop from the destination node and ask who came before until we get to the source node.
+  3. The results are then inserted into a list and returned.  
 
 * `center` - return the node that is the closest to every other node.   
 **Approach:** we are searching for the node with the shortest path, but from the longest result this node got from `shortestPathDist`.
 We've implemented the algorithm in the following way:    
-  1. loop through all of the nodes in the graph.
-  2. for each node check with `shortestPathDist` what is the **longest** path
-  3. return the node with the shortest one.  
+  1. Loop through all of the nodes in the graph.
+  2. For each node check with `shortestPathDist` what is the **longest** path
+  3. Return the node with the shortest one.  
 
 * `tsp` - return the shrotest path between a list of nodes.   
 **Approach:** we are using swaping algorithm, in order to get an acceptble path at reasonble time.
@@ -64,7 +64,28 @@ Class | Description
 
 
 ### UML:
-![](diagram.jpg)
+![](diagram.jpg)  
+
+## Results:
+### Running Algorithms:
+##### Center:
+G1 - 13 ms  
+G2 - 16 ms  
+G3 - 69 ms  
+1000 vertices - 3 sec 600 ms  
+10000 vertices -   
+##### Isconnected:  
+G1 - 7 ms  
+G2 - 7 ms  
+G3 - 8 ms  
+1000 vertices - 76 ms  
+10000 vertices - 533 ms  
+##### TSP (path of 7 nodes):
+G1 - 15 ms  
+G2 - 25 ms  
+G3 - 37 ms  
+1000 vertices - 16 sec  
+10000 vertices - timeout  
 
 
 # GUI:
@@ -80,7 +101,7 @@ java -jar Ex2.jar <graph.json>
 ```  
 
 ## How To Run:
-to run the algorithms, without the GUI interface, do the following:
+To run the algorithms, without the GUI interface, do the following:
 1. Download this repository and open it in an IDE.
 2. In the Ex2.java (in the src folder) go to the bottom of the file and choose a graph (json graph files can be found in the Data folder).
 3. Next choose an algorithm to run on the graph, and finaly run the main function in the Ex2.java file. 

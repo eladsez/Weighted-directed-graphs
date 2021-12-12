@@ -6,8 +6,8 @@ import api.NodeData;
 import logicControl.DWGraph;
 import logicControl.DWGraphAlgo;
 import logicControl.Node;
+
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import javax.swing.plaf.FontUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -19,9 +19,10 @@ import java.util.Vector;
 
 
 public class MainFrame extends JFrame implements ActionListener {
+    // ********* if you want a full screen button ********
+//    static GraphicsDevice device = GraphicsEnvironment
+//            .getLocalGraphicsEnvironment().getScreenDevices()[0];
 
-    static GraphicsDevice device = GraphicsEnvironment
-            .getLocalGraphicsEnvironment().getScreenDevices()[0];
     DWGraphAlgo gAlgo;
     private DrawGraphPanel panel;
 
@@ -35,6 +36,7 @@ public class MainFrame extends JFrame implements ActionListener {
     final private JMenu fileMenu;
     final private JMenu algoMenu;
     final private JMenu editMenu;
+    final private JMenu infoMenu;
     final private JMenuItem loadG;
     final private JMenuItem saveG;
     final private JMenuItem exitItem;
@@ -47,6 +49,8 @@ public class MainFrame extends JFrame implements ActionListener {
     final private JMenuItem addEdgeItem;
     final private JMenuItem removeNodeItem;
     final private JMenuItem removeEdgeItem;
+    final private JMenuItem nodeSizeItem;
+    final private JMenuItem edgeSizeItem;
 
 
     public MainFrame(DirectedWeightedGraphAlgorithms gAlgo) throws HeadlessException {
@@ -63,6 +67,7 @@ public class MainFrame extends JFrame implements ActionListener {
         this.fileMenu = new JMenu("File");
         this.algoMenu = new JMenu("Algorithms");
         this.editMenu = new JMenu("Edit");
+        this.infoMenu = new JMenu("Info");
         this.exitItem = new JMenuItem("Exit");
         this.loadG = new JMenuItem("Load Graph");
         this.saveG = new JMenuItem("save Graph");
@@ -75,8 +80,9 @@ public class MainFrame extends JFrame implements ActionListener {
         this.addEdgeItem = new JMenuItem("Add Edge");
         this.removeNodeItem = new JMenuItem("Remove Node");
         this.removeEdgeItem = new JMenuItem("Remove Edge");
-
-        Color color = new Color(40,40,42);
+        this.nodeSizeItem = new JMenuItem("Node size");
+        this.edgeSizeItem = new JMenuItem("Edge size");
+        Color color = new Color(40, 40, 42);
         Font font = new Font("Serif", Font.PLAIN, 20);
         UIManager.put("OptionPane.messageFont", new FontUIResource(font));
 
@@ -104,7 +110,11 @@ public class MainFrame extends JFrame implements ActionListener {
         this.addEdgeItem.addActionListener(this);
         this.removeNodeItem.addActionListener(this);
         this.removeEdgeItem.addActionListener(this);
+        this.nodeSizeItem.addActionListener(this);
+        this.edgeSizeItem.addActionListener(this);
 
+        this.infoMenu.add(nodeSizeItem);
+        this.infoMenu.add(edgeSizeItem);
         this.editMenu.add(addNodeItem);
         this.editMenu.add(removeNodeItem);
         this.editMenu.add(addEdgeItem);
@@ -120,9 +130,10 @@ public class MainFrame extends JFrame implements ActionListener {
         this.menuBar.add(fileMenu);
         this.menuBar.add(editMenu);
         this.menuBar.add(algoMenu);
+        this.menuBar.add(infoMenu);
         this.setJMenuBar(menuBar);
 
- // ********* if you want a full screen button ********
+        // ********* if you want a full screen button ********
 //        this.fsPanel.add(fullScreen);
 //        this.exitFSPanel.add(exitFS);
 //        this.add(fsPanel);
@@ -158,13 +169,14 @@ public class MainFrame extends JFrame implements ActionListener {
             JFileChooser fileChooser = new JFileChooser();
             try {
                 fileChooser.setCurrentDirectory(new File("./Data"));
-            }catch (Exception E){}
+            } catch (Exception E) {
+            }
             int response = fileChooser.showOpenDialog(null);
             if (response == JFileChooser.APPROVE_OPTION) {
                 String graphPath = fileChooser.getSelectedFile().getAbsolutePath();
-                if(!this.gAlgo.load(graphPath)){
+                if (!this.gAlgo.load(graphPath)) {
                     JOptionPane.showMessageDialog(null, "Wrong file type, please load .json file."
-                            ,"ERROR", JOptionPane.ERROR_MESSAGE);
+                            , "ERROR", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 String graphName = "";
@@ -191,7 +203,8 @@ public class MainFrame extends JFrame implements ActionListener {
             JFileChooser fileChooser = new JFileChooser();
             try {
                 fileChooser.setCurrentDirectory(new File("./Data"));
-            }catch (Exception E){}
+            } catch (Exception E) {
+            }
             int response = fileChooser.showSaveDialog(null);
             if (response == JFileChooser.APPROVE_OPTION) {
                 String graphPath = fileChooser.getSelectedFile().getAbsolutePath();
@@ -199,16 +212,16 @@ public class MainFrame extends JFrame implements ActionListener {
             }
         }
 
-        if (e.getSource() == shortestPathItem){
-            String[] pathTo = JOptionPane.showInputDialog(null,"Enter: \"src,dest\"","shortestPath"
-                    ,JOptionPane.INFORMATION_MESSAGE).split(",");
-            try{
+        if (e.getSource() == shortestPathItem) {
+            String[] pathTo = JOptionPane.showInputDialog(null, "Enter: \"src,dest\"", "shortestPath"
+                    , JOptionPane.INFORMATION_MESSAGE).split(",");
+            try {
                 int src = Integer.parseInt(pathTo[0]);
                 int dest = Integer.parseInt(pathTo[1]);
                 Vector<NodeData> path = (Vector<NodeData>) this.gAlgo.shortestPath(src, dest);
-                if (path == null){
-                    JOptionPane.showMessageDialog(null, "There is no path from "+src+" to "+dest
-                            ,"No path",JOptionPane.WARNING_MESSAGE);
+                if (path == null) {
+                    JOptionPane.showMessageDialog(null, "There is no path from " + src + " to " + dest
+                            , "No path", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
                 this.remove(panel);
@@ -216,16 +229,16 @@ public class MainFrame extends JFrame implements ActionListener {
                 this.add(panel);
                 this.repaint();
                 this.revalidate();
-            }catch (Exception E){
+            } catch (Exception E) {
                 JOptionPane.showMessageDialog(null, "Invalid src,dest", "ERROR"
                         , JOptionPane.ERROR_MESSAGE);
             }
         }
 
-        if (e.getSource() == centerItem){
+        if (e.getSource() == centerItem) {
             Node center = (Node) this.gAlgo.center();
-            if(center == null){
-                JOptionPane.showMessageDialog(null, "The graph is not strongly connected!","ERROR"
+            if (center == null) {
+                JOptionPane.showMessageDialog(null, "The graph is not strongly connected!", "ERROR"
                         , JOptionPane.ERROR_MESSAGE);
             }
             this.remove(panel);
@@ -235,34 +248,33 @@ public class MainFrame extends JFrame implements ActionListener {
             this.revalidate();
         }
 
-        if (e.getSource() == shortestPathDistItem){
-            String[] pathTo = JOptionPane.showInputDialog(null,"Enter: \"src,dest\"","shortestPathDist"
-                    ,JOptionPane.INFORMATION_MESSAGE).split(",");
+        if (e.getSource() == shortestPathDistItem) {
+            String[] pathTo = JOptionPane.showInputDialog(null, "Enter: \"src,dest\"", "shortestPathDist"
+                    , JOptionPane.INFORMATION_MESSAGE).split(",");
             try {
                 int src = Integer.parseInt(pathTo[0]);
                 int dest = Integer.parseInt(pathTo[1]);
                 double dist = this.gAlgo.shortestPathDist(src, dest);
-                if (dist != -1){
-                    JOptionPane.showMessageDialog(null, "The shortest path distance from " + src + " to " +dest+" is: "
-                                    +dist,"Distance",JOptionPane.INFORMATION_MESSAGE);
-                }
-                else JOptionPane.showMessageDialog(null, "There is no path from "+src+" to "+dest
-                ,"No path",JOptionPane.WARNING_MESSAGE);
-            }catch (Exception E) {
+                if (dist != -1) {
+                    JOptionPane.showMessageDialog(null, "The shortest path distance from " + src + " to " + dest + " is: "
+                            + dist, "Distance", JOptionPane.INFORMATION_MESSAGE);
+                } else JOptionPane.showMessageDialog(null, "There is no path from " + src + " to " + dest
+                        , "No path", JOptionPane.WARNING_MESSAGE);
+            } catch (Exception E) {
                 JOptionPane.showMessageDialog(null, "Invalid src,dest", "ERROR"
                         , JOptionPane.ERROR_MESSAGE);
             }
         }
 
-        if (e.getSource() == isConnectedItem){
-            if(this.gAlgo.isConnected())
-            JOptionPane.showMessageDialog(null, "The graph is strongly connected!", "isConnected",
-                    JOptionPane.INFORMATION_MESSAGE);
+        if (e.getSource() == isConnectedItem) {
+            if (this.gAlgo.isConnected())
+                JOptionPane.showMessageDialog(null, "The graph is strongly connected!", "isConnected",
+                        JOptionPane.INFORMATION_MESSAGE);
             else JOptionPane.showMessageDialog(null, "The graph is  NOT strongly connected!", "isConnected",
                     JOptionPane.INFORMATION_MESSAGE);
         }
 
-        if (e.getSource() == addNodeItem){
+        if (e.getSource() == addNodeItem) {
             try {
                 String[] node = JOptionPane.showInputDialog(null, "Enter a new node: \"key,x,y\""
                         , "Add node", JOptionPane.PLAIN_MESSAGE).split(",");
@@ -274,15 +286,14 @@ public class MainFrame extends JFrame implements ActionListener {
                 this.add(panel);
                 this.repaint();
                 this.revalidate();
-            }
-            catch (Exception E){
+            } catch (Exception E) {
                 JOptionPane.showMessageDialog(null, "Invalid Node", "ERROR"
                         , JOptionPane.ERROR_MESSAGE);
             }
         }
 
-        if (e.getSource() == removeNodeItem){
-            try{
+        if (e.getSource() == removeNodeItem) {
+            try {
                 String nodeKey = JOptionPane.showInputDialog(null, "Enter node KEY to remove"
                         , "Remove node", JOptionPane.INFORMATION_MESSAGE);
                 this.gAlgo.getGraph().removeNode(Integer.parseInt(nodeKey));
@@ -291,33 +302,31 @@ public class MainFrame extends JFrame implements ActionListener {
                 this.add(panel);
                 this.repaint();
                 this.revalidate();
-            }
-            catch (Exception E){
+            } catch (Exception E) {
                 JOptionPane.showMessageDialog(null, "Invalid Node key", "ERROR"
                         , JOptionPane.ERROR_MESSAGE);
             }
         }
 
-        if (e.getSource() == addEdgeItem){
+        if (e.getSource() == addEdgeItem) {
             try {
                 String[] src_dest_w = JOptionPane.showInputDialog(null, "Enter \"src,dest,weight\" to connect"
                         , "Add edge", JOptionPane.PLAIN_MESSAGE).split(",");
                 this.gAlgo.getGraph().connect(Integer.parseInt(src_dest_w[0]), Integer.parseInt(src_dest_w[1])
-                        ,Double.parseDouble(src_dest_w[2]));
+                        , Double.parseDouble(src_dest_w[2]));
                 this.remove(panel);
                 this.panel = new DrawGraphPanel((DWGraph) gAlgo.getGraph(), null, null);
                 this.add(panel);
                 this.repaint();
                 this.revalidate();
-            }
-            catch (Exception E){
+            } catch (Exception E) {
                 E.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Invalid \"src,dest,weight\"", "ERROR"
                         , JOptionPane.ERROR_MESSAGE);
             }
         }
 
-        if (e.getSource() == removeEdgeItem){
+        if (e.getSource() == removeEdgeItem) {
             try {
                 String[] src_dest = JOptionPane.showInputDialog(null, "Enter \"src,dest\" to to remove the edge" +
                                 "between them"
@@ -328,16 +337,25 @@ public class MainFrame extends JFrame implements ActionListener {
                 this.add(panel);
                 this.repaint();
                 this.revalidate();
-            }
-            catch (Exception E){
+            } catch (Exception E) {
                 JOptionPane.showMessageDialog(null, "Invalid \"src,dest\"", "ERROR"
                         , JOptionPane.ERROR_MESSAGE);
             }
         }
 
-        if (e.getSource() == tspItem){
+        if (e.getSource() == edgeSizeItem){
+            JOptionPane.showMessageDialog(null, "There is " + this.gAlgo.getGraph().nodeSize()+
+                    " nodes in this graph", "Nodes size", JOptionPane.INFORMATION_MESSAGE);
+        }
 
-            try{
+        if (e.getSource() == nodeSizeItem){
+            JOptionPane.showMessageDialog(null, "There is " + this.gAlgo.getGraph().edgeSize()+
+                    " edges in this graph", "Edges size", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+        if (e.getSource() == tspItem) {
+
+            try {
                 String input = JOptionPane.showInputDialog(null, "Enter nodes key \"key1,key2,key3....\""
                         , "Traveler salesman problem", JOptionPane.INFORMATION_MESSAGE);
 //                System.out.println("---"+input+"---");
@@ -345,16 +363,15 @@ public class MainFrame extends JFrame implements ActionListener {
                     return;
                 String[] nodesKey = input.split(",");
                 List nodes = new ArrayList<NodeData>(nodesKey.length);
-                for (int i =0; i < nodesKey.length; ++i)
+                for (int i = 0; i < nodesKey.length; ++i)
                     nodes.add(this.gAlgo.getGraph().getNode(Integer.parseInt(nodesKey[i])));
-                List tspNodes  = this.gAlgo.tsp(nodes);
+                List tspNodes = this.gAlgo.tsp(nodes);
                 this.remove(panel);
                 this.panel = new DrawGraphPanel((DWGraph) gAlgo.getGraph(), tspNodes, null);
                 this.add(panel);
                 this.repaint();
                 this.revalidate();
-            }
-            catch (Exception E){
+            } catch (Exception E) {
                 JOptionPane.showMessageDialog(null, "Invalid nodes key", "ERROR"
                         , JOptionPane.ERROR_MESSAGE);
             }
