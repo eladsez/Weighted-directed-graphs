@@ -67,13 +67,19 @@ Class | Description
 ![](diagram.jpg)  
 
 ## Results:
+### Load Graph:
+G1 - 33 ms  
+G2 - 35 ms  
+G3 - 39 ms  
+1000 vertices - 115 ms
+10000 vertices - 418 ms
 ### Running Algorithms:
 ##### Center:
 G1 - 13 ms  
 G2 - 16 ms  
 G3 - 69 ms  
 1000 vertices - 3 sec 600 ms  
-10000 vertices -   
+10000 vertices - timeout  
 ##### Isconnected:  
 G1 - 7 ms  
 G2 - 7 ms  
