@@ -82,7 +82,7 @@ public class MainFrame extends JFrame implements ActionListener {
         this.removeEdgeItem = new JMenuItem("Remove Edge");
         this.nodeSizeItem = new JMenuItem("Node size");
         this.edgeSizeItem = new JMenuItem("Edge size");
-        Color color = new Color(40, 40, 42);
+        Color color = new Color(70, 70, 72);
         Font font = new Font("Serif", Font.PLAIN, 20);
         UIManager.put("OptionPane.messageFont", new FontUIResource(font));
 
@@ -346,18 +346,17 @@ public class MainFrame extends JFrame implements ActionListener {
             }
         }
 
-        if (e.getSource() == edgeSizeItem){
+        if (e.getSource() == nodeSizeItem){
             JOptionPane.showMessageDialog(null, "There is " + this.gAlgo.getGraph().nodeSize()+
                     " nodes in this graph", "Nodes size", JOptionPane.INFORMATION_MESSAGE);
         }
 
-        if (e.getSource() == nodeSizeItem){
+        if (e.getSource() == edgeSizeItem){
             JOptionPane.showMessageDialog(null, "There is " + this.gAlgo.getGraph().edgeSize()+
                     " edges in this graph", "Edges size", JOptionPane.INFORMATION_MESSAGE);
         }
 
         if (e.getSource() == tspItem) {
-
             try {
                 String input = JOptionPane.showInputDialog(null, "Enter nodes key \"key1,key2,key3....\""
                         , "Traveler salesman problem", JOptionPane.INFORMATION_MESSAGE);
