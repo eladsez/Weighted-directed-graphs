@@ -273,6 +273,8 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
             if (checkNode.getKey() == src)
                 continue;
             currDist = shortestPathDist(src, checkNode.getKey());
+            if (currDist > currMinDist)
+                break;
             if (returnDist < currDist)
                 returnDist = currDist;
             if (currDist > currMinDist)
@@ -345,6 +347,7 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
         for (int i = assembledRoute.size() - 1; i > node2; i--) {
             routeEnd.add(assembledRoute.remove(i));
         }
+        Collections.reverse(routeEnd);
 
         //coping and reversing the order of all the nodes from node1 to node2
         for (int i = node2; i >= node1; i--) {
@@ -365,11 +368,9 @@ public class DWGraphAlgo implements api.DirectedWeightedGraphAlgorithms {
         double dist = 0;
         double currDist;
 
-        for (int i = 0; i < route.size() - 1; i++) {
-            for (int j = i + 1; j < route.size(); j++) {
-                currDist = shortestPathDist(this.graph.getNode(i).getKey(), this.graph.getNode(j).getKey());
-                dist += currDist;
-            }
+        for (int i = 0, j = i + 1; j < route.size(); i++, j++) {
+            currDist = shortestPathDist(route.get(i).getKey(), route.get(j).getKey());
+            dist += currDist;
         }
 
         return dist;
