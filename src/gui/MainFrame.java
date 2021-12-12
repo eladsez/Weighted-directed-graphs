@@ -140,8 +140,11 @@ public class MainFrame extends JFrame implements ActionListener {
 //        this.add(exitFSPanel);
         this.add(panel);
 
+        this.setSize(500,500);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+//        this.setResizable(false);
         this.setBackground(color);
+        this.setIconImage(new ImageIcon("icon.jpg").getImage());
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setVisible(true);

@@ -61,8 +61,8 @@ public class DrawGraphPanel extends JPanel {
             maxX = Math.max(maxX, x);
             maxY = Math.max(maxY, y);
         }
-        double uintX = this.screenSize.width / (maxX - minX) * 0.9;
-        double unitY = this.screenSize.height / (maxY - minY) * 0.8;
+        double uintX = this.getWidth() / (maxX - minX) * 0.9;
+        double unitY = this.getHeight() / (maxY - minY) * 0.8;
 
         iter = this.graph.nodeIter();
 
